@@ -64,16 +64,16 @@ for lang in "${LANGUAGES[@]}"; do
         python)
             echo "Running Python..."
             
-            source venv/bin/activate
+            source sig-python/venv/bin/activate
             
-            python main.py "${ARGS[@]}"
+            python sig-python/main.py "${ARGS[@]}"
             
             deactivate
             ;;
         java)
             echo "Running Java..."
             
-            java -jar main.jar "${ARGS[@]}"
+            # java -jar main.jar "${ARGS[@]}"
             ;;
     esac
 done
