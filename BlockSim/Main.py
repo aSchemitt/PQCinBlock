@@ -49,7 +49,9 @@ def main():
             for line in reader:
                 if len(line) == 3:
                     variant = line[0]
+                    print(variant)
                     p.variant = variant
+                    print(p.variant)
                     try:
                         mean_verify = float(line[1])
                         std_verify = float(line[2])
@@ -57,55 +59,55 @@ def main():
                         p.std_verify = std_verify
                     except Exception as e:
                         print(e)
-                       
-                    for i in range(p.Runs):
-                        clock = 0  # set clock to 0 at the start of the simulation
-                        if p.hasTrans:
-                            if p.Ttechnique == "Light":
-                                LT.create_transactions()  # generate pending transactions
-                            elif p.Ttechnique == "Full":
-                                FT.create_transactions()  # generate pending transactions
+                    try:
+                        for i in range(p.Runs):
+                            clock = 0  # set clock to 0 at the start of the simulation
+                            if p.hasTrans:
+                                if p.Ttechnique == "Light":
+                                    LT.create_transactions()  # generate pending transactions
+                                elif p.Ttechnique == "Full":
+                                    FT.create_transactions()  # generate pending transactions
 
-                        Node.generate_gensis_block()  # generate the gensis block for all miners
-                        # initiate initial events >= 1 to start with
-                        BlockCommit.generate_initial_events()
+                            Node.generate_gensis_block()  # generate the gensis block for all miners
+                            # initiate initial events >= 1 to start with
+                            BlockCommit.generate_initial_events()
 
-                        while not Queue.isEmpty() and clock <= p.simTime:
-                            next_event = Queue.get_next_event()
-                            clock = next_event.time  # move clock to the time of the event
-                            BlockCommit.handle_event(next_event)
-                            Queue.remove_event(next_event)
+                            while not Queue.isEmpty() and clock <= p.simTime:
+                                next_event = Queue.get_next_event()
+                                clock = next_event.time  # move clock to the time of the event
+                                BlockCommit.handle_event(next_event)
+                                Queue.remove_event(next_event)
 
-                        # for the AppendableBlock process transactions and
-                        # optionally verify the model implementation
-                        if p.model == 3:
-                            BlockCommit.process_gateway_transaction_pools()
+                            # for the AppendableBlock process transactions and
+                            # optionally verify the model implementation
+                            if p.model == 3:
+                                BlockCommit.process_gateway_transaction_pools()
 
-                            if i == 0 and p.VerifyImplemetation:
-                                Verification.perform_checks()
+                                if i == 0 and p.VerifyImplemetation:
+                                    Verification.perform_checks()
 
-                        Consensus.fork_resolution()  # apply the longest chain to resolve the forks
-                        # distribute the rewards between the particiapting nodes
-                        Incentives.distribute_rewards()
-                        # calculate the simulation results (e.g., block statstics and miners' rewards)
-                        Statistics.calculate()
+                            Consensus.fork_resolution()  # apply the longest chain to resolve the forks
+                            # distribute the rewards between the particiapting nodes
+                            Incentives.distribute_rewards()
+                            # calculate the simulation results (e.g., block statstics and miners' rewards)
+                            Statistics.calculate()
 
-                        if p.model == 3:
-                            Statistics.print_to_excel(i, True)
-                            Statistics.reset()
-                        else:
-                            ########## reset all global variable before the next run #############
-                            Statistics.reset()  # reset all variables used to calculate the results
-                            Node.resetState()  # reset all the states (blockchains) for all nodes in the network
-                            fname = "results/{0}(Allverify)1day_{1}M_{2}K.xlsx".format(p.means_from_language+"-"+p.Signing_Algorithm,
-                                p.Bsize/1000000, p.Tn/1000)
-                            # print all the simulation results in an excel file
-                            Statistics.print_to_excel(fname)
-                            fname = "results/{0}(Allverify)1day_{1}M_{2}K.xlsx".format(p.means_from_language+"-"+p.Signing_Algorithm,
-                                p.Bsize/1000000, p.Tn/1000)
-                            # print all the simulation results in an excel file
-                            Statistics.print_to_excel(fname)
-                            Statistics.reset2()  # reset profit results
+                            if p.model == 3:
+                                Statistics.print_to_excel(i, True)
+                                Statistics.reset()
+                            else:
+                                ########## reset all global variable before the next run #############
+                                Statistics.reset()  # reset all variables used to calculate the results
+                                Node.resetState()  # reset all the states (blockchains) for all nodes in the network
+                                fname = "results/{0}(Allverify)1day_{1}M_{2}K.xlsx".format(p.variant, p.Bsize/1000000, p.Tn/1000)
+                                # print all the simulation results in an excel file
+                                Statistics.print_to_excel(fname)
+                                fname = "results/{0}(Allverify)1day_{1}M_{2}K.xlsx".format(p.variant, p.Bsize/1000000, p.Tn/1000)
+                                # print all the simulation results in an excel file
+                                Statistics.print_to_excel(fname)
+                                Statistics.reset2()  # reset profit results
+                    except Exception as e:
+                        print("Error ("+str(e)+") in main loop")
     except Exception as e:
         print(e)
 
