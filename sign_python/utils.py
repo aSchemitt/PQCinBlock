@@ -1,41 +1,8 @@
 import argparse
-import oqs
-import os
+
 from datetime import datetime
 
-DIR_RESULTS = "results"
-DIR_GRAPH = "graph"
-
-def create_result_dirs(suffix=None):
-    
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-    dir_name = f"{timestamp}_{suffix}" if suffix else timestamp
-
-    dir_results = os.path.join(DIR_RESULTS, dir_name)
-    dir_graph = os.path.join(dir_results, DIR_GRAPH)
-    
-    dir_graph_log = os.path.join(dir_graph, "log")
-    dir_graph_linear = os.path.join(dir_graph, "linear")
-
-    os.makedirs(dir_graph_log, exist_ok=True)
-    os.makedirs(dir_graph_linear, exist_ok=True)
-
-    return dir_results, dir_graph_log, dir_graph_linear
-
-def get_variants_by_level(df, variant_dict):
-    csv_variants = set(df.index.to_list())
-
-    variants_by_level = {}
-
-    for scheme, levels in variant_dict.items():
-        for level, variant_name in levels.items():
-            if variant_name in csv_variants:
-                variants_by_level.setdefault(level, []).append(variant_name)
-
-    return dict(sorted(variants_by_level.items()))
-
-def mechanisms_groups(input_mechanisms, mechanisms, normalizer, nist_levels, oqs_cls):
+def get_pqc_mechanisms_groups(input_mechanisms, mechanisms, normalizer, nist_levels, oqs_cls):
     """
     Filters and groups cryptographic mechanisms based on inclusion/exclusion patterns 
     and maps them to their respective NIST security levels.
@@ -134,7 +101,7 @@ def mechanisms_groups(input_mechanisms, mechanisms, normalizer, nist_levels, oqs
     return matches
 
 
-def get_ecdsa_mechanisms(input_mechanisms, curves, nist_levels):
+def get_ecdsa_mechanisms_groups(input_mechanisms, curves, nist_levels):
     
     matches = {}
     
@@ -150,40 +117,3 @@ def get_ecdsa_mechanisms(input_mechanisms, curves, nist_levels):
                 matches[mechanism] = variants_with_levels         
         
     return matches
-
-
-def positive_int(value: int):
-    """
-    Validates that the provided value is a positive integer.
-
-    Parameters:
-        value (int): The value to validate.
-
-    Returns:
-        int: The validated positive integer.
-
-    Raises:
-        argparse.ArgumentTypeError: If the value is not a positive integer.
-    """
-    ivalue = int(value)
-    if ivalue <= 0:
-        raise argparse.ArgumentTypeError(f"{value} is not a positive integer")
-    return ivalue
-
-def non_negative_int(value: int):
-    """
-    Validates that the provided value is a non-negative integer.
-
-    Parameters:
-        value (int): The value to validate.
-
-    Returns:
-        int: The validated non-negative integer.
-
-    Raises:
-        argparse.ArgumentTypeError: If the value is negative.
-    """
-    ivalue = int(value)
-    if ivalue < 0:
-        raise argparse.ArgumentTypeError(f"{value} is not a non-negative integer")
-    return ivalue

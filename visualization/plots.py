@@ -6,7 +6,7 @@ import seaborn as sns
 import pandas as pd
 
 # Internal import 
-import utils
+from visualization import utils
 
 def plot(
     df_all, 
@@ -123,7 +123,7 @@ def plot(
 
 
 def generate_plots_from_csv(
-    csv_path,
+    path_csv,
     dir_graph,
     variants_dict,
     columns,
@@ -148,7 +148,7 @@ def generate_plots_from_csv(
     different variants, including optional error bars, value labels, and legends.
 
     Args:
-        csv_path (str): Path to the CSV file containing the benchmark data.
+        path_csv (str): Path to the CSV file containing the benchmark data.
         dir_graph (str): Directory where the plots will be saved.
         variants_dict (dict): Dictionary mapping levels to lists of variants.
         columns (list[tuple]): List of tuples in the form (value_column, error_column, label) 
@@ -168,7 +168,7 @@ def generate_plots_from_csv(
         None
     """
     
-    df = pd.read_csv(csv_path, index_col="variant")
+    df = pd.read_csv(path_csv, index_col="variant")
     variants_by_level = utils.get_variants_by_level(df, variants_dict)
 
     for level, variants in variants_by_level.items():

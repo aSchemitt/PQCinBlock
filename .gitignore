@@ -1,1 +1,7 @@
-results
+**/__pycache__/
+
+results/
+
+liboqs-python/
+liboqs/
+venv/
