@@ -2,8 +2,8 @@ from InputsConfig import InputsConfig as p
 from Models.Consensus import Consensus as c
 from Models.Incentives import Incentives
 import pandas as pd
-
-
+import numpy as np
+import csv
 class Statistics:
 
     ########################################################### Global variables used to calculate and print simuation results ###########################################################################################
@@ -19,6 +19,7 @@ class Statistics:
     profits= [[0 for x in range(7)] for y in range(p.Runs * len(p.NODES))] # rows number of miners * number of runs, columns =7
     index=0
     chain=[]
+    blocks_verification_times = []
 
     def calculate():
         Statistics.global_chain() # print the global chain
@@ -69,6 +70,7 @@ class Statistics:
                 for i in c.global_chain:
                         block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.usedgas, len(i.uncles), i.transactions_verification_time]
                         Statistics.chain +=[block]
+                        Statistics.blocks_verification_times.append(i.transactions_verification_time)
 
     ########################################################### Print simulation results to Excel ###########################################################################################
     def print_to_excel(fname):
@@ -95,6 +97,19 @@ class Statistics:
 
         writer._save()
 
+    def print_to_csv():
+        mean_blocks = np.mean(Statistics.blocks_verification_times)
+        std_verify = np.std(Statistics.blocks_verification_times)
+        cabecalho = ["variant", "mean_verify", "std_verify"]
+        filename = "results/saida.csv"
+        try:
+            with open(filename,'w',newline='',encoding='utf-8') as outputs:
+                writer = csv.writer(outputs)
+                writer.writerow(cabecalho)
+                writer.writerow([p.variant, mean_blocks, std_verify])
+        except Exception as e:
+            print(e)
+
     ########################################################### Reset all global variables used to calculate the simulation results ###########################################################################################
     def reset():
         Statistics.totalBlocks=0
@@ -111,3 +126,4 @@ class Statistics:
         Statistics.profits= [[0 for x in range(7)] for y in range(p.Runs * len(p.NODES))] # rows number of miners * number of runs, columns =7
         Statistics.index=0
         Statistics.chain=[]
+        Statistics.blocks_verification_times=[]

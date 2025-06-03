@@ -105,6 +105,10 @@ def main():
                                 fname = "results/{0}(Allverify)1day_{1}M_{2}K.xlsx".format(p.variant, p.Bsize/1000000, p.Tn/1000)
                                 # print all the simulation results in an excel file
                                 Statistics.print_to_excel(fname)
+                                try:
+                                    Statistics.print_to_csv()
+                                except Exception as e:
+                                    print("Error ("+str(e)+") in print csv")
                                 Statistics.reset2()  # reset profit results
                     except Exception as e:
                         print("Error ("+str(e)+") in main loop")
