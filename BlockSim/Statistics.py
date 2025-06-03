@@ -4,6 +4,7 @@ from Models.Incentives import Incentives
 import pandas as pd
 import numpy as np
 import csv
+import os
 class Statistics:
 
     ########################################################### Global variables used to calculate and print simuation results ###########################################################################################
@@ -98,17 +99,44 @@ class Statistics:
         writer._save()
 
     def print_to_csv():
-        mean_blocks = np.mean(Statistics.blocks_verification_times)
-        std_verify = np.std(Statistics.blocks_verification_times)
         cabecalho = ["variant", "mean_verify", "std_verify"]
-        filename = "results/saida.csv"
+        filename = "saida.csv"
+        filedir = "results"
+        filepath = filedir+"/"+filename
+        
+        os.makedirs(filedir,exist_ok=True)
+        file_exists = os.path.exists(filepath)
+        print(f"file exists? {file_exists}\n path: {filepath}")
+        write_header = False
+        if not file_exists:
+            write_header = True
+        else:
+            with open(filepath, 'r', newline='', encoding='utf-8') as f:
+                reader = csv.reader(f)
+                try:
+                    first_line = next(reader)
+                    if first_line != cabecalho:
+                        print(f"Aviso: O cabeçalho de '{filename}' não corresponde ao esperado! Conteúdo atual: {first_line}\nRecriando o arquivo!")
+                        write_header = True # CUIDADO: isso sobrescreve o arquivo
+                except StopIteration:
+                    write_header = True
+        
         try:
-            with open(filename,'w',newline='',encoding='utf-8') as outputs:
+            with open(filepath, 'a',newline='', encoding='utf-8') as outputs:
                 writer = csv.writer(outputs)
-                writer.writerow(cabecalho)
+                if write_header:
+                    writer.writerow(cabecalho)
+                
+                if Statistics.blocks_verification_times:
+                    mean_blocks = np.mean(Statistics.blocks_verification_times)
+                    std_verify = np.std(Statistics.blocks_verification_times)
+                else:
+                    mean_blocks = np.nan
+                    std_verify = np.nan
+                
                 writer.writerow([p.variant, mean_blocks, std_verify])
         except Exception as e:
-            print(e)
+            print(f"Error: {e} in create csv")
 
     ########################################################### Reset all global variables used to calculate the simulation results ###########################################################################################
     def reset():

@@ -3,6 +3,7 @@ from Event import Event, Queue
 from Scheduler import Scheduler
 from Statistics import Statistics
 import csv
+import os
 
 if p.model == 3:
     from Models.AppendableBlock.BlockCommit import BlockCommit
@@ -96,6 +97,7 @@ def main():
                                 Statistics.print_to_excel(i, True)
                                 Statistics.reset()
                             else:
+                                os.makedirs("results",exist_ok=True)
                                 ########## reset all global variable before the next run #############
                                 Statistics.reset()  # reset all variables used to calculate the results
                                 Node.resetState()  # reset all the states (blockchains) for all nodes in the network
