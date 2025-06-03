@@ -108,13 +108,16 @@ class InputsConfig:
         Runs = 1  # Number of simulation runs
 
         """ Other Parameters """
-        Signing_Algorithm = "ECDSA384"
+        # Signing_Algorithm = "ECDSA384"
         # Signing_Algorithm = "Dillithium3"
         # Signing_Algorithm = "Sphincs+192f"
         
-        means_from_language = "Java"
+        # means_from_language = "Java"
         # means_from_language = "Python"
         # means_from_language = "C-C++"
+        variant = ""
+        mean_verify = 0.0
+        std_verify = 0.0
 
     ''' Input configurations for AppendableBlock model '''
     if model == 3:

@@ -171,34 +171,34 @@ def calculate_creation_time():
 
 # TODO use the more acurate values
 def calculate_verification_time():
-    language_algorithm = (p.means_from_language, p.Signing_Algorithm)
+    # language_algorithm = (p.means_from_language, p.Signing_Algorithm)
 
-    match language_algorithm:
-        case ("Java", "ECDSA384"):
-            mean = 0.18335970950
-            standard_deviation = 0.01330874960
-        case ("Java", "Dillithium3"):
-            mean = 0.49128941910
-            standard_deviation = 0.30889319890 
-        case ("Java", "Sphincs+192f"):
-            mean = 56.09813371590
-            standard_deviation = 0.38878176013
+    # match language_algorithm:
+    #     case ("Java", "ECDSA384"):
+    #         mean = 0.18335970950
+    #         standard_deviation = 0.01330874960
+    #     case ("Java", "Dillithium3"):
+    #         mean = 0.49128941910
+    #         standard_deviation = 0.30889319890 
+    #     case ("Java", "Sphincs+192f"):
+    #         mean = 56.09813371590
+    #         standard_deviation = 0.38878176013
 
-        case ("Python", "ECDSA384"):
-            mean = 0.36977098660
-            standard_deviation = 0.00168400000
-        case ("Python", "Dillithium3"):
-            mean = 0.03722764010
-            standard_deviation = 0.00059083910
-        case ("Python", "Sphincs+192f"):
-            mean = 0.63858025320
-            standard_deviation = 0.00761349060
+    #     case ("Python", "ECDSA384"):
+    #         mean = 0.36977098660
+    #         standard_deviation = 0.00168400000
+    #     case ("Python", "Dillithium3"):
+    #         mean = 0.03722764010
+    #         standard_deviation = 0.00059083910
+    #     case ("Python", "Sphincs+192f"):
+    #         mean = 0.63858025320
+    #         standard_deviation = 0.00761349060
 
-        case ("C-C++", "ECDSA384"):
-            mean = 1.02015166
-            standard_deviation = 0.005019122382
-        case ("C-C++", "Dillithium3"):
-            mean = 0.1111510
-            standard_deviation = 0.06584563651
+    #     case ("C-C++", "ECDSA384"):
+    #         mean = 1.02015166
+    #         standard_deviation = 0.005019122382
+    #     case ("C-C++", "Dillithium3"):
+    #         mean = 0.1111510
+    #         standard_deviation = 0.06584563651
 
-    return random.gauss(mu=mean,sigma=standard_deviation)
+    return random.gauss(mu=p.mean_verify,sigma=p.std_verify)
