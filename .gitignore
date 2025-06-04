@@ -1,7 +1,7 @@
-**/__pycache__/
-
-results/
-
-liboqs-python/
+results
 liboqs/
+liboqs-python/
 venv/
+
+*.pyc
+*/venv/*
