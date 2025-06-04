@@ -26,9 +26,7 @@ def main():
     
     args = parser.parse_args()
 
-    print(oqs.get_enabled_sig_mechanisms())
-
-    # print algoritmos/variantes disponíveis
+    # Prints the available algorithms/variants
     if args.list_sig:
         list_sign(levels=args.levels)
     
@@ -43,6 +41,7 @@ def main():
 
             path_csv = f"{dir_results}/time-evaluation-mean-std.csv"
 
+            # Generates the execution graphs
             generate_graphs(
                 path_csv=path_csv,
                 dir_results=dir_results,
@@ -52,17 +51,13 @@ def main():
         if args.simulator:
 
             dir_simulator = save.simulator_dir(dir_results=dir_results)
-
-            # output_blocksim=f"{dir_simulator}/blocksim_out.csv"
-            # BlockSim(input_file=path_csv, output_blocksim)
             
-            outfile=f"{dir_simulator}/saida.csv"
-            blocksim(filename=path_csv, outfile=outfile)
-            
+            blocksim_output=f"{dir_simulator}/blocksim_output.csv"
+            blocksim(filename=path_csv, outfile=outfile)        
 
-        # gerar gráficos do simulador
+        # Generates the simulator graphs
         generate_graphs(
-            path_csv=outfile,
+            path_csv=blocksim_output,
             dir_results=dir_simulator,
             mechanisms_dict=combined_mechanisms
         )

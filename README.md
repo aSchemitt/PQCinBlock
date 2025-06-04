@@ -1,4 +1,4 @@
-# Avaliação dos algoritmos pós-quânticos
+# BlockSignPQC
 
 ## Instalação da `liboqs` e do `liboqs-python`
 
