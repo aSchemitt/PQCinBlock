@@ -114,7 +114,7 @@ def plot(
     for ext in save_formats:
         file = f"{dir_graph}/{filename}.{ext}"
         plt.savefig(file, format=ext)    
-        print(f"Graph {file} was created")
+        # print(f"Graph {file} was created")
 
     if show_graph:
         plt.show()

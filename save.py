@@ -34,6 +34,13 @@ def graph_dirs(dir_results):
 
     return dir_graph_log, dir_graph_linear
 
+def simulator_dir(dir_results):
+    
+    dir_simulator = path.join(dir_results, DIR_SIMULATOR)
+
+    makedirs(dir_simulator, exist_ok=True)
+
+    return dir_simulator
 
 def save_results(dfs, input_mechanisms, levels, mechanisms_dict=None):
 

@@ -6,6 +6,7 @@ from sign_python.sing import executions, list_sign
 from sign_python.rules import SIG_MECHANISMS
 from visualization.graph import generate_graphs
 import utils
+import save
 
 def main():
 
@@ -51,7 +52,18 @@ def main():
             # passar no csv para o simulador
             # pegar csv da saída do simulador
 
+            dir_simulator = save.simulator_dir(dir_results=dir_results)
+
+            # output_blocksim=f"{dir_simulator}/blocksim_out.csv"
+            # BlockSim(input_file=path_csv, output_blocksim)
+
         # gerar gráficos do simulador
+        # generate_graphs(
+        #     path_csv=output,
+        #     dir_results=dir_simulator,
+        #     mechanisms_dict=combined_mechanisms
+        # )
+        
 
 
 if __name__ == "__main__":
