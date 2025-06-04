@@ -1,46 +1,48 @@
-from InputsConfig import InputsConfig as p
-from Event import Event, Queue
-from Scheduler import Scheduler
-from Statistics import Statistics
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Event import Event, Queue
+from BlockSim.Scheduler import Scheduler
+from BlockSim.Statistics import Statistics
 import csv
 import os
+import sys
 
 if p.model == 3:
-    from Models.AppendableBlock.BlockCommit import BlockCommit
-    from Models.Consensus import Consensus
-    from Models.AppendableBlock.Transaction import FullTransaction as FT
-    from Models.AppendableBlock.Node import Node
-    from Models.Incentives import Incentives
-    from Models.AppendableBlock.Statistics import Statistics
-    from Models.AppendableBlock.Verification import Verification
+    from BlockSim.Models.AppendableBlock.BlockCommit import BlockCommit
+    from BlockSim.Models.Consensus import Consensus
+    from BlockSim.Models.AppendableBlock.Transaction import FullTransaction as FT
+    from BlockSim.Models.AppendableBlock.Node import Node
+    from BlockSim.Models.Incentives import Incentives
+    from BlockSim.Models.AppendableBlock.Statistics import Statistics
+    from BlockSim.Models.AppendableBlock.Verification import Verification
 
 elif p.model == 2:
-    from Models.Ethereum.BlockCommit import BlockCommit
-    from Models.Ethereum.Consensus import Consensus
-    from Models.Ethereum.Transaction import LightTransaction as LT, FullTransaction as FT
-    from Models.Ethereum.Node import Node
-    from Models.Ethereum.Incentives import Incentives
+    from BlockSim.Models.Ethereum.BlockCommit import BlockCommit
+    from BlockSim.Models.Ethereum.Consensus import Consensus
+    from BlockSim.Models.Ethereum.Transaction import LightTransaction as LT, FullTransaction as FT
+    from BlockSim.Models.Ethereum.Node import Node
+    from BlockSim.Models.Ethereum.Incentives import Incentives
 
 elif p.model == 1:
-    from Models.Bitcoin.BlockCommit import BlockCommit
-    from Models.Bitcoin.Consensus import Consensus
-    from Models.Transaction import LightTransaction as LT, FullTransaction as FT
-    from Models.Bitcoin.Node import Node
-    from Models.Incentives import Incentives
+    from BlockSim.Models.Bitcoin.BlockCommit import BlockCommit
+    from BlockSim.Models.Bitcoin.Consensus import Consensus
+    from BlockSim.Models.Transaction import LightTransaction as LT, FullTransaction as FT
+    from BlockSim.Models.Bitcoin.Node import Node
+    from BlockSim.Models.Incentives import Incentives
 
 elif p.model == 0:
-    from Models.BlockCommit import BlockCommit
-    from Models.Consensus import Consensus
-    from Models.Transaction import LightTransaction as LT, FullTransaction as FT
-    from Models.Node import Node
-    from Models.Incentives import Incentives
+    from BlockSim.Models.BlockCommit import BlockCommit
+    from BlockSim.Models.Consensus import Consensus
+    from BlockSim.Models.Transaction import LightTransaction as LT, FullTransaction as FT
+    from BlockSim.Models.Node import Node
+    from BlockSim.Models.Incentives import Incentives
 
 ########################################################## Start Simulation ##############################################################
 
 
-def main():
+def blocksim(filename, outfile):
     # TODO: adicionar a execução baseada no arquivo de resultados
-    filename = "entrada.csv"
+    # filename = "entrada.csv"
+    # filename = sys.argv[1]
     try: 
         with open(filename,'r', newline='') as inputs:
             reader = csv.reader(inputs)
@@ -50,9 +52,9 @@ def main():
             for line in reader:
                 if len(line) == 3:
                     variant = line[0]
-                    print(variant)
+                    # print(variant)
                     p.variant = variant
-                    print(p.variant)
+                    # print(p.variant)
                     try:
                         mean_verify = float(line[1])
                         std_verify = float(line[2])
@@ -97,18 +99,18 @@ def main():
                                 Statistics.print_to_excel(i, True)
                                 Statistics.reset()
                             else:
-                                os.makedirs("results",exist_ok=True)
+                                # os.makedirs("results",exist_ok=True)
                                 ########## reset all global variable before the next run #############
                                 Statistics.reset()  # reset all variables used to calculate the results
                                 Node.resetState()  # reset all the states (blockchains) for all nodes in the network
-                                fname = "results/{0}(Allverify)1day_{1}M_{2}K.xlsx".format(p.variant, p.Bsize/1000000, p.Tn/1000)
+                                # fname = "results/{0}(Allverify)1day_{1}M_{2}K.xlsx".format(p.variant, p.Bsize/1000000, p.Tn/1000)
                                 # print all the simulation results in an excel file
-                                Statistics.print_to_excel(fname)
-                                fname = "results/{0}(Allverify)1day_{1}M_{2}K.xlsx".format(p.variant, p.Bsize/1000000, p.Tn/1000)
+                                # Statistics.print_to_excel(fname)
+                                # fname = "results/{0}(Allverify)1day_{1}M_{2}K.xlsx".format(p.variant, p.Bsize/1000000, p.Tn/1000)
                                 # print all the simulation results in an excel file
-                                Statistics.print_to_excel(fname)
+                                # Statistics.print_to_excel(fname)
                                 try:
-                                    Statistics.print_to_csv()
+                                    Statistics.print_to_csv(outfile)
                                 except Exception as e:
                                     print("Error ("+str(e)+") in print csv")
                                 Statistics.reset2()  # reset profit results
@@ -119,5 +121,5 @@ def main():
 
 
 ######################################################## Run Main method #####################################################################
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

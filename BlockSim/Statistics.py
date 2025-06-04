@@ -1,6 +1,6 @@
-from InputsConfig import InputsConfig as p
-from Models.Consensus import Consensus as c
-from Models.Incentives import Incentives
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.Consensus import Consensus as c
+from BlockSim.Models.Incentives import Incentives
 import pandas as pd
 import numpy as np
 import csv
@@ -98,20 +98,20 @@ class Statistics:
 
         writer._save()
 
-    def print_to_csv():
+    def print_to_csv(outfile):
         cabecalho = ["variant", "mean_verify", "std_verify"]
-        filename = "saida.csv"
-        filedir = "results"
-        filepath = filedir+"/"+filename
+        # filename = "saida.csv"
+        # filedir = "results"
+        # filepath = filedir+"/"+filename
         
-        os.makedirs(filedir,exist_ok=True)
-        file_exists = os.path.exists(filepath)
-        print(f"file exists? {file_exists}\n path: {filepath}")
+        # os.makedirs(filedir,exist_ok=True)
+        file_exists = os.path.exists(outfile)
+        # print(f"file exists? {file_exists}\n path: {filepath}")
         write_header = False
         if not file_exists:
             write_header = True
         else:
-            with open(filepath, 'r', newline='', encoding='utf-8') as f:
+            with open(outfile, 'r', newline='', encoding='utf-8') as f:
                 reader = csv.reader(f)
                 try:
                     first_line = next(reader)
@@ -122,7 +122,7 @@ class Statistics:
                     write_header = True
         
         try:
-            with open(filepath, 'a',newline='', encoding='utf-8') as outputs:
+            with open(outfile, 'a',newline='', encoding='utf-8') as outputs:
                 writer = csv.writer(outputs)
                 if write_header:
                     writer.writerow(cabecalho)

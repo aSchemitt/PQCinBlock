@@ -1,7 +1,7 @@
 import numpy as np
-from InputsConfig import InputsConfig as p
-from Models.Bitcoin.Node import Node
-from Models.Consensus import Consensus as BaseConsensus
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.Bitcoin.Node import Node
+from BlockSim.Models.Consensus import Consensus as BaseConsensus
 import random
 
 class Consensus(BaseConsensus):

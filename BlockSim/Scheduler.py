@@ -1,15 +1,15 @@
-from InputsConfig import InputsConfig as p
+from BlockSim.InputsConfig import InputsConfig as p
 import random
-from Models.Block import Block
-from Event import Event, Queue
+from BlockSim.Models.Block import Block
+from BlockSim.Event import Event, Queue
 
 if p.model == 2:
-    from Models.Ethereum.Block import Block
+    from BlockSim.Models.Ethereum.Block import Block
 elif p.model == 3:
-    from Models.AppendableBlock.Block import Block as AB
-    from Models.AppendableBlock.Node import Node
+    from BlockSim.Models.AppendableBlock.Block import Block as AB
+    from BlockSim.Models.AppendableBlock.Node import Node
 else:
-    from Models.Block import Block
+    from BlockSim.Models.Block import Block
 
 
 class Scheduler:

@@ -1,11 +1,11 @@
-from Scheduler import Scheduler
-from InputsConfig import InputsConfig as p
-from Models.Bitcoin.Node import Node
-from Statistics import Statistics
-from Models.Transaction import LightTransaction as LT, FullTransaction as FT
-from Models.Network import Network
-from Models.Bitcoin.Consensus import Consensus as c
-from Models.BlockCommit import BlockCommit as BaseBlockCommit
+from BlockSim.Scheduler import Scheduler
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.Bitcoin.Node import Node
+from BlockSim.Statistics import Statistics
+from BlockSim.Models.Transaction import LightTransaction as LT, FullTransaction as FT
+from BlockSim.Models.Network import Network
+from BlockSim.Models.Bitcoin.Consensus import Consensus as c
+from BlockSim.Models.BlockCommit import BlockCommit as BaseBlockCommit
 
 class BlockCommit(BaseBlockCommit):
 

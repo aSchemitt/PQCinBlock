@@ -1,5 +1,5 @@
-from InputsConfig import InputsConfig as p
-from Models.Consensus import Consensus as c
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.Consensus import Consensus as c
 
 class Incentives:
 

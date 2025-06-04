@@ -1,7 +1,7 @@
-from InputsConfig import InputsConfig as p
-from Models.Consensus import Consensus as c
-from Models.Incentives import Incentives as BaseIncentives
-from Statistics import Statistics
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.Consensus import Consensus as c
+from BlockSim.Models.Incentives import Incentives as BaseIncentives
+from BlockSim.Statistics import Statistics
 
 
 class Incentives(BaseIncentives):

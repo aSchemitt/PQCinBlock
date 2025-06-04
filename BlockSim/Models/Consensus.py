@@ -1,6 +1,6 @@
 import numpy as np
-from InputsConfig import InputsConfig as p
-from Models.Node import Node
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.Node import Node
 import random
 
 class Consensus:

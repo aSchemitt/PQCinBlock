@@ -1,5 +1,5 @@
-from Models.Ethereum.Block import Block
-from Models.Node import Node as BaseNode
+from BlockSim.Models.Ethereum.Block import Block
+from BlockSim.Models.Node import Node as BaseNode
 
 
 #from ImportClasses import Block
@@ -18,13 +18,13 @@ class Node(BaseNode):
 
 
     def generate_gensis_block():
-        from InputsConfig import InputsConfig as p
+        from BlockSim.InputsConfig import InputsConfig as p
         for node in p.NODES:
             node.blockchain.append(Block())
             
     # This to allow miners to include uncle blocks in their main blocks
     def add_uncles(miner):
-        from InputsConfig import InputsConfig as p
+        from BlockSim.InputsConfig import InputsConfig as p
         maxUncles = p.Buncles
         uncles=[]
 
@@ -44,7 +44,7 @@ class Node(BaseNode):
 
     ########################################################### reset the state of blockchains for all nodes in the network (before starting the next run) ###########################################################################################
     def resetState():
-        from InputsConfig import InputsConfig as p
+        from BlockSim.InputsConfig import InputsConfig as p
         for node in p.NODES:
             node.blockchain= [] # create an array for each miner to store chain state locally
             node.transactionsPool= []

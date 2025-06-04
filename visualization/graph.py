@@ -36,7 +36,7 @@ def generate_graphs(
         ylim=(1e-2, 1e1), # log
         values_position=1.5e-2, #log
         error_position=1.1, #log        
-        show_graph=True,                
+        show_graph=False,                
         show_values=True,
         show_erros=True,
         show_legend=False, 
@@ -52,7 +52,7 @@ def generate_graphs(
         ylim=(0, 1.4), # linear
         values_position=0.02, #linear
         error_position=1.005, #linear
-        show_graph=True,                
+        show_graph=False,                
         show_values=True,
         show_erros=True,
         show_legend=False, 

@@ -1,11 +1,11 @@
-from Scheduler import Scheduler
-from InputsConfig import InputsConfig as p
-from Models.Ethereum.Node import Node
-from Statistics import Statistics
-from Models.Ethereum.Transaction import LightTransaction as LT, FullTransaction as FT
-from Models.Network import Network
-from Models.Ethereum.Consensus import Consensus as c
-from Models.BlockCommit import BlockCommit as BaseBlockCommit
+from BlockSim.Scheduler import Scheduler
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.Ethereum.Node import Node
+from BlockSim.Statistics import Statistics
+from BlockSim.Models.Ethereum.Transaction import LightTransaction as LT, FullTransaction as FT
+from BlockSim.Models.Network import Network
+from BlockSim.Models.Ethereum.Consensus import Consensus as c
+from BlockSim.Models.BlockCommit import BlockCommit as BaseBlockCommit
 
 class BlockCommit(BaseBlockCommit):
 
@@ -99,7 +99,7 @@ class BlockCommit(BaseBlockCommit):
     def update_local_blockchain(node,miner,depth):
         # the node here is the one that needs to update its blockchain, while miner here is the one who owns the last block generated
         # the node will update its blockchain to mach the miner's blockchain
-        from InputsConfig import InputsConfig as p
+        from BlockSim.InputsConfig import InputsConfig as p
         i=0
         while (i < depth):
             if (i < len(node.blockchain)):

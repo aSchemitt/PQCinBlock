@@ -7,8 +7,8 @@
 # Date: March 2020
 #
 #######################################################################################
-from Models.AppendableBlock.Block import Block
-from Models.Node import Node as BaseNode
+from BlockSim.Models.AppendableBlock.Block import Block
+from BlockSim.Models.Node import Node as BaseNode
 
 
 class Node(BaseNode):
@@ -30,7 +30,7 @@ class Node(BaseNode):
 
     # Generates a genesis block and appends it to the local blockchain of all the gateway nodes
     def generate_gensis_block():
-        from InputsConfig import InputsConfig as p
+        from BlockSim.InputsConfig import InputsConfig as p
         for node in p.NODES[0:p.Gn]:
             node.blockchain.append(Block())
 

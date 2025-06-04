@@ -1,4 +1,4 @@
-from Models.Block import Block as BaseBlock
+from BlockSim.Models.Block import Block as BaseBlock
 
 class Block(BaseBlock):
 

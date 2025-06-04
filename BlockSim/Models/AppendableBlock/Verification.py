@@ -8,9 +8,9 @@
 #
 #######################################################################################
 
-from InputsConfig import InputsConfig as p
-from Models.AppendableBlock.Block import Block as block
-from Models.AppendableBlock.Transaction import Transaction as Transaction
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.AppendableBlock.Block import Block as block
+from BlockSim.Models.AppendableBlock.Transaction import Transaction as Transaction
 import pandas as pd
 import numpy as np
 from datetime import datetime

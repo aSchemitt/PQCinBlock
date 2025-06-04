@@ -1,7 +1,6 @@
-results
+results/
 liboqs/
 liboqs-python/
 venv/
 */__pycache__/*
 *.pyc
-*/venv/*

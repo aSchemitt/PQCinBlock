@@ -8,15 +8,15 @@
 #
 #######################################################################################
 
-from Event import Event, Queue
-from Models.BlockCommit import BlockCommit as BaseBlockCommit
-from Scheduler import Scheduler
-from InputsConfig import InputsConfig as p
-from Models.AppendableBlock.Node import Node
-from Models.AppendableBlock.Statistics import Statistics
-from Models.AppendableBlock.Transaction import FullTransaction as FT
-from Models.AppendableBlock.Transaction import Transaction as Transaction
-from Models.AppendableBlock.Network import Network
+from BlockSim.Event import Event, Queue
+from BlockSim.Models.BlockCommit import BlockCommit as BaseBlockCommit
+from BlockSim.Scheduler import Scheduler
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.AppendableBlock.Node import Node
+from BlockSim.Models.AppendableBlock.Statistics import Statistics
+from BlockSim.Models.AppendableBlock.Transaction import FullTransaction as FT
+from BlockSim.Models.AppendableBlock.Transaction import Transaction as Transaction
+from BlockSim.Models.AppendableBlock.Network import Network
 import random
 import copy
 

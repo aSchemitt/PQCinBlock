@@ -1,5 +1,5 @@
 import operator
-from InputsConfig import InputsConfig as p
+from BlockSim.InputsConfig import InputsConfig as p
 
 class Event(object):
 

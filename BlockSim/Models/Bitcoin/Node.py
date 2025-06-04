@@ -1,5 +1,5 @@
-from Models.Block import Block
-from Models.Node import Node as BaseNode
+from BlockSim.Models.Block import Block
+from BlockSim.Models.Node import Node as BaseNode
 
 class Node(BaseNode):
     def __init__(self,id,hashPower):

@@ -1,4 +1,4 @@
-from Models.Block import Block
+from BlockSim.Models.Block import Block
 
 class Node(object):
 
@@ -19,7 +19,7 @@ class Node(object):
 
     # Generate the Genesis block and append it to the local blockchain for all nodes
     def generate_gensis_block():
-        from InputsConfig import InputsConfig as p
+        from BlockSim.InputsConfig import InputsConfig as p
         for node in p.NODES:
             node.blockchain.append(Block())
 
@@ -33,7 +33,7 @@ class Node(object):
 
     # reset the state of blockchains for all nodes in the network (before starting the next run) 
     def resetState():
-        from InputsConfig import InputsConfig as p
+        from BlockSim.InputsConfig import InputsConfig as p
         for node in p.NODES:
             node.blockchain= [] # create an array for each miner to store chain state locally
             node.transactionsPool= []

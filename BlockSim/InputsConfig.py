@@ -30,7 +30,7 @@ class InputsConfig:
         ''' Node Parameters '''
         Nn = 3  # the total number of nodes in the network
         NODES = []
-        from Models.Node import Node
+        from BlockSim.Models.Node import Node
         # here as an example we define three nodes by assigning a unique id for each one
         NODES = [Node(id=0), Node(id=1)]
 
@@ -58,7 +58,7 @@ class InputsConfig:
         ''' Node Parameters '''
         Nn = 3  # the total number of nodes in the network
         NODES = []
-        from Models.Bitcoin.Node import Node
+        from BlockSim.Models.Bitcoin.Node import Node
         # here as an example we define three nodes by assigning a unique id for each one + % of hash (computing) power
         NODES = [Node(id=0, hashPower=50), Node(
             id=1, hashPower=20), Node(id=2, hashPower=30)]
@@ -98,7 +98,7 @@ class InputsConfig:
         ''' Node Parameters '''
         Nn = 3  # the total number of nodes in the network
         NODES = []
-        from Models.Ethereum.Node import Node
+        from BlockSim.Models.Ethereum.Node import Node
         # here as an example we define three nodes by assigning a unique id for each one + % of hash (computing) power
         NODES = [Node(id=0, hashPower=50), Node(
             id=1, hashPower=20), Node(id=2, hashPower=30)]
@@ -143,7 +143,7 @@ class InputsConfig:
         NODES = []
         # A list of all the gateway Ids
         GATEWAYIDS = [chr(x+97) for x in range(Gn)]
-        from Models.AppendableBlock.Node import Node
+        from BlockSim.Models.AppendableBlock.Node import Node
 
         # Create all the gateways
         for i in GATEWAYIDS:

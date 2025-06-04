@@ -1,6 +1,6 @@
-from Models.Transaction import Transaction as BaseTransaction
-from Models.AppendableBlock.Network import Network
-from InputsConfig import InputsConfig as p
+from BlockSim.Models.Transaction import Transaction as BaseTransaction
+from BlockSim.Models.AppendableBlock.Network import Network
+from BlockSim.InputsConfig import InputsConfig as p
 import random
 import numpy as np
 import operator

@@ -9,11 +9,11 @@
 #######################################################################################
 
 
-from InputsConfig import InputsConfig as p
-from Models.Consensus import Consensus as c
-from Models.Incentives import Incentives
+from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.Models.Consensus import Consensus as c
+from BlockSim.Models.Incentives import Incentives
 import pandas as pd
-from Models.AppendableBlock.Block import Block as block
+from BlockSim.Models.AppendableBlock.Block import Block as block
 import numpy as np
 from datetime import datetime
 

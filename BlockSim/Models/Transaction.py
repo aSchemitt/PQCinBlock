@@ -1,7 +1,7 @@
 import random
-from InputsConfig import InputsConfig as p
+from BlockSim.InputsConfig import InputsConfig as p
 import numpy as np
-import Models.Network
+import BlockSim.Models.Network
 import operator
 
 
