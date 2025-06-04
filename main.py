@@ -53,7 +53,7 @@ def main():
             dir_simulator = save.simulator_dir(dir_results=dir_results)
             
             blocksim_output=f"{dir_simulator}/blocksim_output.csv"
-            blocksim(filename=path_csv, outfile=outfile)        
+            blocksim(filename=path_csv, outfile=blocksim_output)        
 
         # Generates the simulator graphs
         generate_graphs(
