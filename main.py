@@ -1,5 +1,6 @@
 import argparse
 import oqs
+import pandas as pd
 
 # Internal imports
 from sign_python.sing import executions, list_sign
@@ -7,8 +8,7 @@ from sign_python.rules import SIG_MECHANISMS
 from visualization.graph import generate_graphs
 import utils
 import save
-
-from BlockSim.Main import blocksim
+from simulator import simulator
 
 def main():
 
@@ -22,7 +22,8 @@ def main():
     parser.add_argument("--runs", "-r", help="Number of executions", type=utils.positive_int, default=1)
     parser.add_argument("--warm-up", "-wp", help="Number of executions warm up", type=utils.non_negative_int, default=0)
     parser.add_argument("--list-sig", help="List of variants digital signature algorithms", action="store_true")
-    parser.add_argument("--simulator", help="Simulator execution", action="store_true")
+    # parser.add_argument("--simulator", help="Simulator execution", action="store_true")
+    parser.add_argument("--runs-simulator", help="Number of simulator runs", type=utils.non_negative_int, default=0)
     
     args = parser.parse_args()
 
@@ -31,7 +32,9 @@ def main():
         list_sign(levels=args.levels)
     
     else:
-        if args.sig:           
+        if args.sig:
+            print("Algorithm run...")
+            
             dir_results, combined_mechanisms = executions(
                 signs=args.sig,
                 levels=args.levels,
@@ -48,21 +51,21 @@ def main():
                 mechanisms_dict=combined_mechanisms
             )
 
-        if args.simulator:
+        if args.runs_simulator:
+            print("BlockSim run...")
 
-            dir_simulator = save.simulator_dir(dir_results=dir_results)
+            output_blocksim_mean_std, dir_simulator = simulator(
+                dir_results=dir_results,                 
+                input_file=path_csv, 
+                runs=args.runs_simulator,
+            )
             
-            blocksim_output=f"{dir_simulator}/blocksim_output.csv"
-            blocksim(filename=path_csv, outfile=blocksim_output)        
-
-        # Generates the simulator graphs
-        generate_graphs(
-            path_csv=blocksim_output,
-            dir_results=dir_simulator,
-            mechanisms_dict=combined_mechanisms
-        )
+            # Generates the simulator graphs
+            generate_graphs(
+                path_csv=output_blocksim_mean_std,
+                dir_results=dir_simulator,
+                mechanisms_dict=combined_mechanisms
+            )
         
-
-
 if __name__ == "__main__":
     main()

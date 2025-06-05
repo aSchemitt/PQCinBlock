@@ -39,21 +39,18 @@ elif p.model == 0:
 ########################################################## Start Simulation ##############################################################
 
 
-def blocksim(filename, outfile):
-    # TODO: adicionar a execução baseada no arquivo de resultados
-    # filename = "entrada.csv"
-    # filename = sys.argv[1]
+def blocksim(input_file, output_file, runs):
+    # TODO: adicionar a execução baseada no arquivo de resultados    
     try: 
-        with open(filename,'r', newline='') as inputs:
+        with open(input_file,'r', newline='') as inputs:
             reader = csv.reader(inputs)
             cabecalho = next(reader)
             if cabecalho != ["variant", "mean_verify", "std_verify"]:
                 print(f"Aviso: O cabeçalho esperado é 'variant,mean_verify,std_verify', mas foi encontrado: {cabecalho}")
             for line in reader:
                 if len(line) == 3:
-                    variant = line[0]
                     # print(variant)
-                    p.variant = variant
+                    p.variant = line[0]
                     # print(p.variant)
                     try:
                         mean_verify = float(line[1])
@@ -63,7 +60,8 @@ def blocksim(filename, outfile):
                     except Exception as e:
                         print(e)
                     try:
-                        for i in range(p.Runs):
+                        # for i in range(p.Runs):
+                        for i in range(runs):
                             clock = 0  # set clock to 0 at the start of the simulation
                             if p.hasTrans:
                                 if p.Ttechnique == "Light":
@@ -110,7 +108,7 @@ def blocksim(filename, outfile):
                                 # print all the simulation results in an excel file
                                 # Statistics.print_to_excel(fname)
                                 try:
-                                    Statistics.print_to_csv(outfile)
+                                    Statistics.print_to_csv(output_file)
                                 except Exception as e:
                                     print("Error ("+str(e)+") in print csv")
                                 Statistics.reset2()  # reset profit results

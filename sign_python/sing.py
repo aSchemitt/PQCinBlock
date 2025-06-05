@@ -5,7 +5,7 @@ import oqs
 from sign_python import pqc, ecdsa, utils
 import save
 from sign_python.rules import SIG_MECHANISMS, CURVES
-
+from utils import compute_mean_std
 
 def _run_times(mechanisms, oqs_time_evaluation, runs, warm_up, ecdsa_time_evaluation=None):
 
@@ -36,29 +36,6 @@ def _print_variants(input_mechanisms, oqs_mechanisms, normalizer, nist_levels, o
         for level, variant in variants.items():
             print(f"{4 * ' '}{variant} - NIST Level {level}")
 
-
-def _compute_mean_std(df, group_by, columns):
-    """
-    Compute mean and standard deviation for specified columns grouped by a key.
-
-    Parameters:
-    - df: The input DataFrame.
-    - group_by: Column name to group by (e.g., 'variant').
-    - columns: List of column names to compute mean and std for.
-
-    Returns:
-    - pd.DataFrame: DataFrame with mean and std columns.
-    """
-    grouped = df.groupby(group_by)
-
-    result = pd.DataFrame()
-    for col in columns:
-        result[f'mean_{col}'] = grouped[col].mean()
-        result[f'std_{col}'] = grouped[col].std()
-
-    # Transform the index into a column
-    result = result.reset_index()
-    return result
 
 def combines_mechanisms(
     input_mechanisms,
@@ -122,7 +99,7 @@ def _evaluation(
     )
 
     # Compute mean and std of time evaluation
-    df_time_evaluation_mean_std = _compute_mean_std(
+    df_time_evaluation_mean_std = compute_mean_std(
         df=df_time_evaluation,
         group_by='variant',
         columns=[

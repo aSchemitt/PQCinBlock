@@ -99,7 +99,8 @@ class Statistics:
         writer._save()
 
     def print_to_csv(outfile):
-        cabecalho = ["variant", "mean_verify", "std_verify"]
+        # cabecalho = ["variant", "mean_verify", "std_verify"]
+        cabecalho = ["variant", "verify"]
         # filename = "saida.csv"
         # filedir = "results"
         # filepath = filedir+"/"+filename
@@ -128,13 +129,15 @@ class Statistics:
                     writer.writerow(cabecalho)
                 
                 if Statistics.blocks_verification_times:
+                    # print(Statistics.blocks_verification_times)
                     mean_blocks = np.mean(Statistics.blocks_verification_times)
-                    std_verify = np.std(Statistics.blocks_verification_times)
+                    # std_verify = np.std(Statistics.blocks_verification_times)
                 else:
                     mean_blocks = np.nan
-                    std_verify = np.nan
+                    # std_verify = np.nan
                 
-                writer.writerow([p.variant, mean_blocks, std_verify])
+                # writer.writerow([p.variant, mean_blocks, std_verify])
+                writer.writerow([p.variant, mean_blocks])
         except Exception as e:
             print(f"Error: {e} in create csv")
 
