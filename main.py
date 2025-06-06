@@ -41,14 +41,6 @@ def main():
                 levels=args.levels,
                 runs=args.runs,
                 warm_up=args.warm_up,
-                log_yticks=np.logspace(-2, 1, num=4, base=10),
-                log_ylim=(1e-2, 1e1),
-                log_values_position=1.5e-2,
-                log_error_position=1.1,
-                linear_yticks=np.linspace(0, 1.4, num=4),
-                linear_ylim=(0, 1.4),
-                linear_values_position=0.02,
-                linear_error_position=1.005,
             )
 
             path_csv = f"{dir_results}/time-evaluation-mean-std.csv"
@@ -57,7 +49,15 @@ def main():
             generate_graphs(
                 path_csv=path_csv,
                 dir_results=dir_results,
-                mechanisms_dict=combined_mechanisms
+                mechanisms_dict=combined_mechanisms,
+                log_yticks=np.logspace(-2, 1, num=4, base=10),
+                log_ylim=(1e-2, 1e1),
+                log_values_position=1.5e-2,
+                log_error_position=1.1,
+                linear_yticks=np.linspace(0, 1.4, num=4),
+                linear_ylim=(0, 1.4),
+                linear_values_position=0.02,
+                linear_error_position=1.005,
             )
 
         if args.runs_simulator:
