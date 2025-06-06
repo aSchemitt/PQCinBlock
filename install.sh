@@ -54,6 +54,12 @@ source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
+
+# Ensure LD_LIBRARY_PATH is set in the venv activation script
+if ! grep -q "LD_LIBRARY_PATH" venv/bin/activate; then
+  echo 'export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH' >> venv/bin/activate
+fi
+
 # =============================
 # Install liboqs-python
 # =============================
