@@ -129,8 +129,10 @@ class Statistics:
                     writer.writerow(cabecalho)
                 
                 if Statistics.blocks_verification_times:
-                    # print(Statistics.blocks_verification_times)
-                    mean_blocks = np.mean(Statistics.blocks_verification_times)
+                    # Genesis Block - descarta o primeiro valor, pois está vindo 0
+                    blocks_verification = Statistics.blocks_verification_times[1:]
+                    # print(blocks_verification, len(blocks_verification))
+                    mean_blocks = np.mean(blocks_verification)
                     # std_verify = np.std(Statistics.blocks_verification_times)
                 else:
                     mean_blocks = np.nan
