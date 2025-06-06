@@ -1,6 +1,7 @@
 import argparse
 import oqs
 import pandas as pd
+import numpy as np
 
 # Internal imports
 from sign_python.sing import executions, list_sign
@@ -34,12 +35,20 @@ def main():
     else:
         if args.sig:
             print("Algorithm run...")
-            
+
             dir_results, combined_mechanisms = executions(
                 signs=args.sig,
                 levels=args.levels,
                 runs=args.runs,
                 warm_up=args.warm_up,
+                log_yticks=np.logspace(-2, 1, num=4, base=10),
+                log_ylim=(1e-2, 1e1),
+                log_values_position=1.5e-2,
+                log_error_position=1.1,
+                linear_yticks=np.linspace(0, 1.4, num=4),
+                linear_ylim=(0, 1.4),
+                linear_values_position=0.02,
+                linear_error_position=1.005,
             )
 
             path_csv = f"{dir_results}/time-evaluation-mean-std.csv"
@@ -64,7 +73,15 @@ def main():
             generate_graphs(
                 path_csv=output_blocksim_mean_std,
                 dir_results=dir_simulator,
-                mechanisms_dict=combined_mechanisms
+                mechanisms_dict=combined_mechanisms,
+                log_yticks=np.logspace(-2,3, num=6, base=10),
+                log_ylim=(1e-2, 1e3),
+                log_values_position=1.5e-2,
+                log_error_position=1.0,
+                linear_yticks=np.linspace(0, 1.4, num=6),
+                linear_ylim=(0, 200),
+                linear_values_position=5.0,
+                linear_error_position=1.0,
             )
         
 if __name__ == "__main__":

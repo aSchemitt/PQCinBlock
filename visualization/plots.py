@@ -20,7 +20,7 @@ def plot(
     ylim=None,
     yticks=None, 
     figsize=(16, 9), 
-    width=0.3, 
+    width=0.5, 
     yscale="log",
     title=None,
     show_graph=False,
