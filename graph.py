@@ -46,8 +46,8 @@ def main():
         show_legend=True,
         values_offset=0.1,
         error_offset=1.05,
-        log_xticks=np.logspace(-2, 1, num=4, base=10),
-        log_xlim=(1e-2, 1e1),
+        log_xticks=np.logspace(-2, 3, num=4, base=10),
+        log_xlim=(1e-2, 1e3),
         linear_xticks=np.linspace(0, 4, num=4),
         linear_xlim=(0, 4),
     )
