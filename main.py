@@ -45,19 +45,24 @@ def main():
 
             path_csv = f"{dir_results}/time-evaluation-mean-std.csv"
 
+        
             # Generates the execution graphs
             generate_graphs(
                 path_csv=path_csv,
                 dir_results=dir_results,
                 mechanisms_dict=combined_mechanisms,
-                log_yticks=np.logspace(-2, 1, num=4, base=10),
-                log_ylim=(1e-2, 1e1),
-                log_values_position=1.5e-2,
-                log_error_position=1.1,
-                linear_yticks=np.linspace(0, 1.4, num=4),
-                linear_ylim=(0, 1.4),
-                linear_values_position=0.02,
-                linear_error_position=1.005,
+                columns=[
+                    # ("mean_keypair", "std_keypair", "Geração de chaves"),
+                    ("mean_sign", "std_sign", "Assinatura"),
+                    ("mean_verify", "std_verify", "Verificação"),
+                ],
+                show_legend=True,
+                values_offset=0.1,
+                error_offset=1.05,
+                log_xticks=np.logspace(-2, 1, num=4, base=10),
+                log_xlim=(1e-2, 1e1),
+                linear_xticks=np.linspace(0, 4, num=4),
+                linear_xlim=(0, 4),
             )
 
         if args.runs_simulator:
@@ -74,14 +79,17 @@ def main():
                 path_csv=output_blocksim_mean_std,
                 dir_results=dir_simulator,
                 mechanisms_dict=combined_mechanisms,
-                log_yticks=np.logspace(-2,3, num=6, base=10),
-                log_ylim=(1e-2, 1e3),
-                log_values_position=1.5e-2,
-                log_error_position=1.0,
-                linear_yticks=np.linspace(0, 1.4, num=6),
-                linear_ylim=(0, 200),
-                linear_values_position=5.0,
-                linear_error_position=1.0,
+                columns=[
+                    # ("mean_keypair", "std_keypair", "Geração de chaves"),
+                    # ("mean_sign", "std_sign", "Assinatura"),
+                    ("mean_verify", "std_verify", "Verificação"),
+                ],
+                values_offset=0.1,
+                error_offset=1.05,
+                log_xticks=np.logspace(-2, 4, num=6, base=10),
+                log_xlim=(1e-2, 1e4),
+                linear_xticks=np.linspace(0, 4, num=6),
+                linear_xlim=(0, 4),
             )
         
 if __name__ == "__main__":

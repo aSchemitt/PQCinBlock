@@ -8,20 +8,21 @@ import pandas as pd
 # Internal import 
 from visualization import utils
 
-def plot(
+def plot_horizontal(
     df_all, 
     columns,
     dir_graph,
-    values_position=None,
-    error_position=None,
-    level=None, 
-    xlabel=None, 
-    ylabel=None,
-    ylim=None,
-    yticks=None, 
+    values_offset,
+    error_offset,
+    level, 
+    xscale,
+    xlabel,
+    ylabel,
+    xlim,
+    xticks, 
+    yticklabels,
     figsize=(16, 9), 
-    width=0.5, 
-    yscale="log",
+    width=0.90,
     title=None,
     show_graph=False,
     show_values=True,
@@ -29,11 +30,12 @@ def plot(
     show_legend=True,
     save_formats=("svg", "png")
 ):
-
     n_variants = len(df_all)
     n_columns = len(columns)
+    
+    width_bar = width / n_columns
 
-    x = np.arange(n_variants)
+    y = np.arange(n_variants)
 
     fig, ax = plt.subplots(figsize=figsize)
 
@@ -42,12 +44,14 @@ def plot(
     for i, (val_col, err_col, label) in enumerate(columns):
         values = df_all[val_col]
         errors = df_all[err_col]
+        
+        reverse_i = n_columns - 1 - i
 
-        bars = ax.bar(
-            x + (i - (n_columns - 1) / 2) * width,
+        bars = ax.barh(
+            y + (reverse_i - (n_columns - 1) / 2) * width_bar,
             values,
-            width=width,
-            yerr=errors if show_values else None,
+            height=width_bar,
+            xerr=errors if show_errors else None,
             label=label,
             color=palette[i],
             error_kw={"capsize": 5, "ecolor": "red", "elinewidth": 2}
@@ -56,56 +60,57 @@ def plot(
         # values
         if show_values:
             for bar, value in zip(bars, values):
-                # height = bar.get_height()
+                offset = values_offset
                 ax.text(
-                    bar.get_x() + bar.get_width() / 2,
-                    values_position, # values position
+                    value * (1 - offset),
+                    bar.get_y() + bar.get_height() / 2,
                     f"{value:.3f}",    
-                    ha="center",
                     va="center",
+                    ha="right",
                     fontsize="large",
                     color="black",
                     fontweight="bold",
                 )
 
         # error
-        if show_errors:            
+        if show_errors:
             for bar, value, error in zip(bars, values, errors):
-                top = value + error
+                right = value + error
+                offset = error_offset
                 ax.text(
-                    bar.get_x() + bar.get_width() / 2,
-                    top * error_position,  # error position
+                    right * offset,
+                    bar.get_y() + bar.get_height() / 2,
                     f"±{error:.3f}",
-                    ha="center",
-                    va="bottom",
+                    va="center",
+                    ha="left",
                     fontsize="large",
                     color="red",
                 )
 
-    ax.set_xticks(x)
-    ax.set_xticklabels(df_all.index.to_list(), rotation=10, ha="center")
+    ax.set_yticks(y)
+    ax.set_yticklabels(df_all[yticklabels].to_list(), rotation=0, va="center")
 
-    ax.set_xlabel(xlabel, fontsize="large")
     ax.set_ylabel(ylabel, fontsize="large")
+    ax.set_xlabel(xlabel, fontsize="large")
     ax.set_title(title, fontsize="xx-large")
 
-    ax.set_yscale(yscale)
+    ax.set_xscale(xscale)
     
-    if yscale == "log":
-        ax.set_yticks(yticks)
+    if xscale == "log":
+        ax.set_xticks(xticks)
     
-    if ylim:
-        ax.set_ylim(*ylim)
+    if xscale == "linear" and xlim:
+        ax.set_xlim(*xlim)
 
-    ax.set_xlim(x[0] - 0.5, x[-1] + 0.5)
+    ax.set_ylim(y[0] - 0.5, y[-1] + 0.5)
 
-    ax.tick_params(axis="x", labelsize="x-large")
     ax.tick_params(axis="y", labelsize="x-large")
+    ax.tick_params(axis="x", labelsize="x-large")
 
     if show_legend:
-        ax.legend(loc="upper right", fontsize="x-large")
+        ax.legend(loc="lower right", fontsize="x-large")
 
-    ax.grid(True, axis="y", linestyle="--", linewidth=0.5, alpha=0.7)
+    ax.grid(True, axis="x", linestyle="--", linewidth=0.5, alpha=0.7)
 
     plt.tight_layout()
 
@@ -113,8 +118,7 @@ def plot(
 
     for ext in save_formats:
         file = f"{dir_graph}/{filename}.{ext}"
-        plt.savefig(file, format=ext)    
-        # print(f"Graph {file} was created")
+        plt.savefig(file, format=ext)
 
     if show_graph:
         plt.show()
@@ -131,13 +135,13 @@ def generate_plots_from_csv(
     show_values,
     show_erros,
     show_legend,
-    values_position=2e-3,
-    error_position=1.05,
-    ylim=(1e-3, 1e4),
-    yticks=None,
-    ylabel="Tempo (ms)",
-    xlabel="Algoritmos",
-    yscale="log",
+    values_offset,
+    error_offset,
+    xscale,
+    xlim,
+    xticks,
+    xlabel="Tempo (ms)",
+    ylabel="Algoritmos",    
     figsize=(16, 9),
     save_formats=("svg", "png"),
 ):
@@ -169,27 +173,58 @@ def generate_plots_from_csv(
     """
     
     df = pd.read_csv(path_csv, index_col="variant")
+
     variants_by_level = utils.get_variants_by_level(df, variants_dict)
 
-    for level, variants in variants_by_level.items():
-        df_subset = df.loc[variants]
+    for level, mechanisms in variants_by_level.items():
 
-        plot(
-            df_subset,
+        variant_to_algorithm = {m["variant"]: m["algorithm"] for m in mechanisms}
+
+        variant_names = [m["variant"] for m in mechanisms]
+
+        df_subset = df.loc[variant_names]
+
+        df_subset["algorithm"] = df_subset.index.map(variant_to_algorithm)
+        
+        # plot(
+        #     df_all=df_subset,
+        #     columns=columns,
+        #     level=level,
+        #     dir_graph=dir_graph,
+        #     yscale=yscale,
+        #     ylabel=ylabel,
+        #     ylim=ylim,
+        #     yticks=yticks,
+        #     values_position=values_position,
+        #     error_position=error_position,
+        #     figsize=figsize,
+        #     title=f"Nível {level}",
+        #     show_graph=show_graph,
+        #     show_values=show_values,
+        #     show_errors=show_erros,
+        #     show_legend=show_legend,
+        #     save_formats=save_formats
+        # )
+
+        plot_horizontal(
+            df_all=df_subset, 
             columns=columns,
-            level=level,
             dir_graph=dir_graph,
-            yscale=yscale,
+            values_offset=values_offset,
+            error_offset=error_offset,
+            level=level, 
             ylabel=ylabel,
-            ylim=ylim,
-            yticks=yticks,
-            values_position=values_position,
-            error_position=error_position,
-            figsize=figsize,
+            xlabel=xlabel,
+            xlim=xlim,
+            xticks=xticks, 
+            yticklabels="algorithm",
+            figsize=(16, 9),
+            width=0.90,
+            xscale=xscale,
             title=f"Nível {level}",
             show_graph=show_graph,
             show_values=show_values,
             show_errors=show_erros,
             show_legend=show_legend,
-            save_formats=save_formats
+            save_formats=("svg", "png")
         )

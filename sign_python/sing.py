@@ -103,8 +103,8 @@ def _evaluation(
         df=df_time_evaluation,
         group_by='variant',
         columns=[
-            # "keypair",
-            # "sign",
+            "keypair",
+            "sign",
             "verify"
         ]
     )
