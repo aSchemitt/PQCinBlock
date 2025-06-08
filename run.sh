@@ -2,7 +2,7 @@
 
 source venv/bin/activate
 
-python main.py --sig \
+python main.py --sign \
     ecdsa \
     mldsa \
     dilithium \

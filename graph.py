@@ -14,7 +14,7 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     
-    parser.add_argument("--sig", help="Input list of digital signature algorithms", type=str, nargs="+", choices=list(SIG_MECHANISMS.keys()))
+    parser.add_argument("--sign", help="Input list of digital signature algorithms", type=str, nargs="+", choices=list(SIG_MECHANISMS.keys()))
     parser.add_argument("--levels", "-l", help="Nist levels", type=int, choices=range(1, 6), default=(range(1,6)), nargs="+")
     parser.add_argument("--dir", type=str)
 
@@ -23,7 +23,7 @@ def main():
     dir_results = args.dir
 
     combined_mechanisms = combines_mechanisms(
-        input_mechanisms=args.sig,
+        input_mechanisms=args.sign,
         oqs_mechanisms=oqs.get_enabled_sig_mechanisms,
         normalizer=SIG_MECHANISMS,
         nist_levels=args.levels,

@@ -18,26 +18,26 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     
-    parser.add_argument("--sig", help="Input list of digital signature algorithms", type=str, nargs="+", choices=list(SIG_MECHANISMS.keys()))
+    parser.add_argument("--sign", help="Input list of digital signature algorithms", type=str, nargs="+", choices=list(SIG_MECHANISMS.keys()))
     parser.add_argument("--levels", "-l", help="Nist levels", type=int, choices=range(1, 6), default=(range(1,6)), nargs="+")
     parser.add_argument("--runs", "-r", help="Number of executions", type=utils.positive_int, default=1)
     parser.add_argument("--warm-up", "-wp", help="Number of executions warm up", type=utils.non_negative_int, default=0)
-    parser.add_argument("--list-sig", help="List of variants digital signature algorithms", action="store_true")
+    parser.add_argument("--list-sign", help="List of variants digital signature algorithms", action="store_true")
     # parser.add_argument("--simulator", help="Simulator execution", action="store_true")
     parser.add_argument("--runs-simulator", help="Number of simulator runs", type=utils.non_negative_int, default=0)
     
     args = parser.parse_args()
 
     # Prints the available algorithms/variants
-    if args.list_sig:
+    if args.list_sign:
         list_sign(levels=args.levels)
     
     else:
-        if args.sig:
+        if args.sign:
             print("Algorithm run...")
 
             dir_results, combined_mechanisms = executions(
-                signs=args.sig,
+                signs=args.sign,
                 levels=args.levels,
                 runs=args.runs,
                 warm_up=args.warm_up,
@@ -45,25 +45,25 @@ def main():
 
             path_csv = f"{dir_results}/time-evaluation-mean-std.csv"
 
-        
             # Generates the execution graphs
             generate_graphs(
                 path_csv=path_csv,
                 dir_results=dir_results,
                 mechanisms_dict=combined_mechanisms,
                 columns=[
-                    # ("mean_keypair", "std_keypair", "Geração de chaves"),
-                    ("mean_sign", "std_sign", "Assinatura"),
-                    ("mean_verify", "std_verify", "Verificação"),
-                ],
+                        # ("mean_keypair", "std_keypair", "Geração de chaves"),
+                        ("mean_sign", "std_sign", "Assinatura"),
+                        ("mean_verify", "std_verify", "Verificação"),
+                    ],
                 show_legend=True,
-                values_offset=0.1,
+                values_offset=0.2,
                 error_offset=1.05,
-                log_xticks=np.logspace(-2, 3, num=4, base=10),
-                log_xlim=(1e-2, 1e3),
-                linear_xticks=np.linspace(0, 4, num=4),
-                linear_xlim=(0, 4),
+                log_xticks=np.logspace(-3, 4, num=8, base=10),
+                log_xlim=(1e-3, 1e4),
+                # linear_xticks=np.linspace(0, 4, num=4),
+                # linear_xlim=(0, 4),
             )
+
 
         if args.runs_simulator:
             print("BlockSim run...")
@@ -84,12 +84,12 @@ def main():
                     # ("mean_sign", "std_sign", "Assinatura"),
                     ("mean_verify", "std_verify", "Verificação"),
                 ],
-                values_offset=0.1,
+                values_offset=0.2,
                 error_offset=1.05,
-                log_xticks=np.logspace(-2, 4, num=6, base=10),
+                log_xticks=np.logspace(-2, 4, num=7, base=10),
                 log_xlim=(1e-2, 1e4),
-                linear_xticks=np.linspace(0, 4, num=6),
-                linear_xlim=(0, 4),
+                # linear_xticks=np.linspace(0, 4, num=6),
+                # linear_xlim=(0, 4),
             )
         
 if __name__ == "__main__":
