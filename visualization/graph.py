@@ -14,8 +14,8 @@ def generate_graphs(
     error_offset,
     log_xticks,
     log_xlim,
-    linear_xticks,
-    linear_xlim,
+    # linear_xticks,
+    # linear_xlim,
     show_graph=False,
     show_values=True,
     show_erros=True,
@@ -28,7 +28,8 @@ def generate_graphs(
         print(f"Error: {e}")
         return
 
-    dir_graph_log, dir_graph_linear = save.graph_dirs(dir_results)
+    # dir_graph_log, dir_graph_linear = save.graph_dirs(dir_results)
+    dir_graph_log = save.graph_dirs(dir_results)
     
     print(dir_graph_log)
     # print(dir_graph_linear)

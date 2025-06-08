@@ -44,12 +44,12 @@ def main():
                 ("mean_verify", "std_verify", "Verificação"),
             ],
         show_legend=True,
-        values_offset=0.1,
+        values_offset=0.2,
         error_offset=1.05,
-        log_xticks=np.logspace(-2, 3, num=4, base=10),
-        log_xlim=(1e-2, 1e3),
-        linear_xticks=np.linspace(0, 4, num=4),
-        linear_xlim=(0, 4),
+        log_xticks=np.logspace(-3, 4, num=8, base=10),
+        log_xlim=(1e-3, 1e4),
+        # linear_xticks=np.linspace(0, 4, num=4),
+        # linear_xlim=(0, 4),
     )
 
     dir_simulator = f"{dir_results}simulator"
@@ -66,12 +66,12 @@ def main():
             # ("mean_sign", "std_sign", "Assinatura"),
             ("mean_verify", "std_verify", "Verificação"),
         ],
-        values_offset=0.1,
+        values_offset=0.2,
         error_offset=1.05,
-        log_xticks=np.logspace(-2, 4, num=6, base=10),
+        log_xticks=np.logspace(-2, 4, num=7, base=10),
         log_xlim=(1e-2, 1e4),
-        linear_xticks=np.linspace(0, 4, num=6),
-        linear_xlim=(0, 4),
+        # linear_xticks=np.linspace(0, 4, num=6),
+        # linear_xlim=(0, 4),
     )
     
 if __name__ == "__main__":

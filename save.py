@@ -27,12 +27,13 @@ def graph_dirs(dir_results):
     dir_graph = path.join(dir_results, DIR_GRAPH)
     
     dir_graph_log = path.join(dir_graph, "log")
-    dir_graph_linear = path.join(dir_graph, "linear")
+    # dir_graph_linear = path.join(dir_graph, "linear")
 
     makedirs(dir_graph_log, exist_ok=True)
-    makedirs(dir_graph_linear, exist_ok=True)
+    # makedirs(dir_graph_linear, exist_ok=True)
 
-    return dir_graph_log, dir_graph_linear
+    # return dir_graph_log, dir_graph_linear
+    return dir_graph_log
 
 def simulator_dir(dir_results):
     

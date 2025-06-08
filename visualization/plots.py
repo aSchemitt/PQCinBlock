@@ -17,13 +17,13 @@ def plot_horizontal(
     level, 
     xscale,
     xlabel,
-    ylabel,
     xlim,
     xticks, 
     yticklabels,
-    figsize=(16, 9), 
-    width=0.90,
+    figsize, 
+    width,
     title=None,
+    ylabel=None,
     show_graph=False,
     show_values=True,
     show_errors=True,
@@ -65,11 +65,11 @@ def plot_horizontal(
                     value * (1 - offset),
                     bar.get_y() + bar.get_height() / 2,
                     f"{value:.3f}",    
-                    va="center",
+                    va="center_baseline",
                     ha="right",
-                    fontsize="large",
+                    fontsize=22,
                     color="black",
-                    fontweight="bold",
+                    fontweight=600,
                 )
 
         # error
@@ -81,18 +81,21 @@ def plot_horizontal(
                     right * offset,
                     bar.get_y() + bar.get_height() / 2,
                     f"±{error:.3f}",
-                    va="center",
+                    va="center_baseline",
                     ha="left",
-                    fontsize="large",
+                    fontsize=20,
                     color="red",
                 )
 
     ax.set_yticks(y)
     ax.set_yticklabels(df_all[yticklabels].to_list(), rotation=0, va="center")
 
-    ax.set_ylabel(ylabel, fontsize="large")
-    ax.set_xlabel(xlabel, fontsize="large")
-    ax.set_title(title, fontsize="xx-large")
+    if ylabel:
+        ax.set_ylabel(ylabel, fontsize=24)
+    if xlabel:
+        ax.set_xlabel(xlabel, fontsize=24)
+    if title:
+        ax.set_title(title, fontsize=32)
 
     ax.set_xscale(xscale)
     
@@ -104,11 +107,11 @@ def plot_horizontal(
 
     ax.set_ylim(y[0] - 0.5, y[-1] + 0.5)
 
-    ax.tick_params(axis="y", labelsize="x-large")
-    ax.tick_params(axis="x", labelsize="x-large")
+    ax.tick_params(axis="y", labelsize=28)
+    ax.tick_params(axis="x", labelsize=28)
 
     if show_legend:
-        ax.legend(loc="lower right", fontsize="x-large")
+        ax.legend(loc="upper right", fontsize=28)
 
     ax.grid(True, axis="x", linestyle="--", linewidth=0.5, alpha=0.7)
 
@@ -140,7 +143,8 @@ def generate_plots_from_csv(
     xscale,
     xlim,
     xticks,
-    xlabel="Tempo (ms)",
+    width=0.85,
+    xlabel="Tempo médio (ms)",
     ylabel="Algoritmos",    
     figsize=(16, 9),
     save_formats=("svg", "png"),
@@ -213,15 +217,15 @@ def generate_plots_from_csv(
             values_offset=values_offset,
             error_offset=error_offset,
             level=level, 
-            ylabel=ylabel,
+            # ylabel=ylabel,
             xlabel=xlabel,
             xlim=xlim,
             xticks=xticks, 
             yticklabels="algorithm",
-            figsize=(16, 9),
-            width=0.90,
+            figsize=figsize,
+            width=width,
             xscale=xscale,
-            title=f"Nível {level}",
+            # title=f"Nível {level}",
             show_graph=show_graph,
             show_values=show_values,
             show_errors=show_erros,
