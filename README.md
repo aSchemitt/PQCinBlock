@@ -28,7 +28,7 @@ A ferramenta é dividida em três módulos principais:
 
 ## Pré-requisitos
 
-- Python 3.11.2
+- [Python 3.11.2](https://www.python.org/downloads/release/python-3112/)
 - [liboqs](https://github.com/open-quantum-safe/liboqs)
 - [liboqs-python](https://github.com/open-quantum-safe/liboqs-python)
 
@@ -126,3 +126,30 @@ python main.py --sig ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 -
 ## Simulação
 
 Use o argumento `--runs-simulat`
+
+## Adicionando Novos Algoritmos
+```python
+ALGORITHMS = {
+    "algortihm_name": {
+        <level_1>: "variant_name",
+        ...
+        <level_5>: "variant_name", 
+    }, ...
+}
+
+def time_evaluation(variant: str, runs: int):
+    # Implementação do benchmark
+    return {
+        "sign_time": [...],
+        "verify_time": [...],
+        "keygen_time": [...]
+    }
+```
+
+## Resultados
+
+## Publicação
+
+Esta ferramenta foi apresentada no SBSeg 2025, como parte do artigo:
+
+> BlockSignPQC: um benchmark para avaliação de algoritmos de assinatura digital pós-quântica em blockchains.
