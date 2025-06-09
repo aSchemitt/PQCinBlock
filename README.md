@@ -146,7 +146,20 @@ def time_evaluation(variant: str, runs: int):
     }
 ```
 
-## Resultados
+## Reprodução dos Experimentos Descritos no Artigo
+
+Clone esse repositório.
+```bash
+git clone https://github.com/PQC-PQS/BlockSignPQC.git
+```
+Conceda permissão de execução para os scripts `install.sh` e `run.sh`.
+```bash
+chmod +x install.sh run.sh
+```
+Execute os experimentos descritos no artigo com o comando:
+```bash
+./run.sh
+```
 
 ## Publicação
 
