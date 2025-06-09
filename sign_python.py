@@ -1,0 +1,109 @@
+import pandas as pd
+import numpy as np
+
+# Internal imports
+import utils
+import save
+from visualization.graph import generate_graphs
+
+def _run_selected_variants(variants_by_module, functions, runs=5, warm_up=1):
+    results = []
+
+    # Inverte o dicionário {module: variants} => {algorithm: module}
+    variant_to_module = {
+        algorithm: module
+        for module, variants in variants_by_module.items()
+        for algorithm in variants
+    }
+
+    for algorithm, module in variant_to_module.items():
+        if module not in functions:
+            print(f"No function available for '{algorithm}'.")
+            continue
+
+        func = functions[module]
+        levels = variants_by_module[module][algorithm]
+
+        for level, variant in levels.items():
+            try:
+                print(f"Running {variant} ({algorithm}) with {module}.py...")
+                # Warm-up
+                func(variant, runs=warm_up)
+                # Runs
+                df = func(variant, runs=runs)
+                df["algorithm"] = algorithm
+                df["level"] = level
+                results.append(df)
+            except Exception as e:
+                print(f"Error: {module}/{variant}: {e}")
+
+    return pd.concat(results, ignore_index=True) if results else pd.DataFrame()
+
+def print_by_variants(filtered_algorithms: dict):
+    for module, algorithms in filtered_algorithms.items():
+        for mechanism, variants in algorithms.items():
+            print(f"{mechanism}:")
+            for level, variant in sorted(variants.items()):
+                print(f"{' ' * 4}{variant} - NIST Level {level}")
+
+def executions(
+    levels,
+    variants_by_module,
+    evaluations_functions,
+    runs, 
+    warm_up
+):
+
+    df_time_evaluation = _run_selected_variants(
+        variants_by_module=variants_by_module, 
+        functions=evaluations_functions,
+        runs=runs,
+        warm_up=warm_up,
+    )
+
+    df_time_evaluation_mean_std = utils.compute_mean_std(
+        df=df_time_evaluation, 
+        group_by="variant",
+        columns=[
+            "keypair",
+            "sign",
+            "verify"
+        ]
+    )
+
+    dfs = {
+        f"time-evaluation-{runs}x": df_time_evaluation,
+        "time-evaluation-mean-std": df_time_evaluation_mean_std,
+    }
+    
+    dir_results = save.save_results(
+        dfs=dfs,
+        algorithms_dict=variants_by_module,
+        levels=levels
+    )
+    
+    path_csv = f"{dir_results}/time-evaluation-mean-std.csv"
+
+    combined_mechanisms = {}
+    for algorithm in variants_by_module.values():
+        combined_mechanisms.update(algorithm)
+    # print(combined_mechanisms)
+
+    # Generates the execution graphs
+    generate_graphs(
+        path_csv=path_csv,
+        dir_results=dir_results,
+        mechanisms_dict=combined_mechanisms,
+        columns=[
+                # ("mean_keypair", "std_keypair", "Geração de chaves"),
+                ("mean_sign", "std_sign", "Assinatura"),
+                ("mean_verify", "std_verify", "Verificação"),
+            ],
+        show_legend=True,
+        values_offset=0.2,
+        error_offset=1.05,
+        log_xticks=np.logspace(-3, 4, num=8, base=10),
+        log_xlim=(1e-3, 1e4),
+    )
+
+    return dir_results

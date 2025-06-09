@@ -11,7 +11,7 @@ from visualization import utils
 def plot_horizontal(
     df_all, 
     columns,
-    dir_graph,
+    graphics_directory,
     values_offset,
     error_offset,
     level, 
@@ -117,11 +117,12 @@ def plot_horizontal(
 
     plt.tight_layout()
 
-    filename = f"level_{level}" if level else "all_level"
+    filename = f"level-{level}" if level else "all_level"
 
     for ext in save_formats:
-        file = f"{dir_graph}/{filename}.{ext}"
+        file = f"{graphics_directory}/{filename}.{ext}"
         plt.savefig(file, format=ext)
+        print(file)
 
     if show_graph:
         plt.show()
@@ -131,7 +132,7 @@ def plot_horizontal(
 
 def generate_plots_from_csv(
     path_csv,
-    dir_graph,
+    graphics_directory,
     variants_dict,
     columns,
     show_graph,
@@ -157,7 +158,7 @@ def generate_plots_from_csv(
 
     Args:
         path_csv (str): Path to the CSV file containing the benchmark data.
-        dir_graph (str): Directory where the plots will be saved.
+        graphics_directory (str): Directory where the plots will be saved.
         variants_dict (dict): Dictionary mapping levels to lists of variants.
         columns (list[tuple]): List of tuples in the form (value_column, error_column, label) 
             representing the data to plot.
@@ -190,30 +191,10 @@ def generate_plots_from_csv(
 
         df_subset["algorithm"] = df_subset.index.map(variant_to_algorithm)
         
-        # plot(
-        #     df_all=df_subset,
-        #     columns=columns,
-        #     level=level,
-        #     dir_graph=dir_graph,
-        #     yscale=yscale,
-        #     ylabel=ylabel,
-        #     ylim=ylim,
-        #     yticks=yticks,
-        #     values_position=values_position,
-        #     error_position=error_position,
-        #     figsize=figsize,
-        #     title=f"Nível {level}",
-        #     show_graph=show_graph,
-        #     show_values=show_values,
-        #     show_errors=show_erros,
-        #     show_legend=show_legend,
-        #     save_formats=save_formats
-        # )
-
         plot_horizontal(
             df_all=df_subset, 
             columns=columns,
-            dir_graph=dir_graph,
+            graphics_directory=graphics_directory,
             values_offset=values_offset,
             error_offset=error_offset,
             level=level, 

@@ -6,7 +6,15 @@ import random
 import string
 import pandas as pd
 
-def time_evaluation(variant, runs, warm_up):
+ALGORITHMS = {
+    'ecdsa': {
+        1: 'P-256',
+        3: 'P-384',
+        5: 'P-521'
+    },
+}
+
+def time_evaluation(variant, runs):
 
     curves = {
         "P-256": ec.SECP256R1(),
@@ -18,29 +26,6 @@ def time_evaluation(variant, runs, warm_up):
         raise ValueError(f"Unknown variant {variant}. Available: {list(curves.keys())}")
 
     curve = curves[variant]
-
-    # Warm up
-    for i in range(warm_up):
-
-        message = ''.join(random.choices(string.ascii_letters + string.digits, k=60)).encode("utf-8")
-
-        sk = ec.generate_private_key(curve)
-        pk = sk.public_key()
-
-        signature = sk.sign(
-            message,
-            ec.ECDSA(hashes.SHA256())
-        )
-
-        try:
-            pk.verify(
-                signature,
-                message,
-                ec.ECDSA(hashes.SHA256())
-            )
-        except InvalidSignature:
-            print(f"WARNING: Verification failed at iteration {i}!")
-        
 
     time_keypair, time_sign, time_verify = [], [], []
     

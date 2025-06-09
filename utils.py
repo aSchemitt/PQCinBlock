@@ -1,3 +1,7 @@
+import os
+import importlib
+import inspect
+from typing import Callable, Any
 import pandas as pd
 
 def positive_int(value: int):
@@ -58,3 +62,52 @@ def compute_mean_std(df, group_by, columns):
     # Transform the index into a column
     result = result.reset_index()
     return result
+
+def _load_from_modules(package: str, attribute_name: str, filter_func: Callable[[Any], bool] = lambda x: True):
+    result = {}
+    package_path = package.replace('.', '/')
+
+    for file in os.listdir(package_path):
+        if file.endswith('.py') and not file.startswith('__'):
+            module_name = file[:-3]
+            full_module_name = f"{package}.{module_name}"
+            module = importlib.import_module(full_module_name)
+
+            attr = getattr(module, attribute_name, None)
+            if attr is not None and filter_func(attr):
+                result[module_name] = attr
+
+    return result
+
+def load_algorithms(package: str):
+    return _load_from_modules(package, "ALGORITHMS")
+
+def load_functions(package: str):
+    return _load_from_modules(package, "time_evaluation", inspect.isfunction)
+
+def extract_algorithms(all_algorithms: dict):
+    algorithms = set()
+    for module, algorithm in all_algorithms.items():
+        algorithms.update(algorithm.keys())
+    return algorithms
+
+def filter_algorithms(algorithms: dict, selected_algorithms: list = None, selected_levels: list = None) -> dict:
+    selected_algorithms = selected_algorithms or []
+    selected_levels = selected_levels or []
+
+    filtered = {}
+
+    for module, algos in algorithms.items():
+        for algorithm, variants in algos.items():
+            if selected_algorithms and algorithm not in selected_algorithms:
+                continue
+
+            selected_variants = {
+                level: name for level, name in variants.items()
+                if not selected_levels or level in selected_levels
+            }
+
+            if selected_variants:
+                filtered.setdefault(module, {})[algorithm] = selected_variants
+
+    return filtered

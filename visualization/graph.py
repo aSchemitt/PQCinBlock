@@ -28,16 +28,12 @@ def generate_graphs(
         print(f"Error: {e}")
         return
 
-    # dir_graph_log, dir_graph_linear = save.graph_dirs(dir_results)
-    dir_graph_log = save.graph_dirs(dir_results)
+    graphics_directory = save.create_graphics_directory(dir_results)
     
-    print(dir_graph_log)
-    # print(dir_graph_linear)
-
     plots.generate_plots_from_csv(
         path_csv=path_csv,
         variants_dict=mechanisms_dict,
-        dir_graph=dir_graph_log,
+        graphics_directory=graphics_directory,
         columns = columns,
         xscale="log",
         xticks=log_xticks,
@@ -49,19 +45,3 @@ def generate_graphs(
         show_erros=show_erros,
         show_legend=show_legend, 
     )
-
-    # plots.generate_plots_from_csv(
-    #     path_csv=path_csv,
-    #     variants_dict=mechanisms_dict,
-    #     dir_graph=dir_graph_linear,
-    #     columns = columns,
-    #     xscale="linear",
-    #     xticks=linear_xticks,
-    #     xlim=linear_xlim,
-    #     values_offset=values_offset,
-    #     error_offset=error_offset,
-    #     show_graph=False,                
-    #     show_values=True,
-    #     show_erros=True,
-    #     show_legend=False, 
-    # )
