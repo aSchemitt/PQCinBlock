@@ -5,25 +5,44 @@ algoritmos de assinatura digital pós-quântica (PQC) em sistemas blockchain.
 Ele permite medições diretas de desempenho criptográfico e simulações realistas
 de redes blockchain por meio da integração com o simulador BlockSim.
 
+## Índice
+
+- [Objetivos](#objetivos)
+- [Estrutura da Ferramenta](#estrutura-da-ferramenta)
+- [Diretórios](#diretórios)
+- [Pré-requisitos](#pré-requisitos)
+- [Ambiente Virtual](#ambiente-virtual)
+- [Lista de Parâmetros](#lista-de-parâmetros)
+- [Execução](#execução)
+- [Simulação](#simulação)
+- [Adicionando Novos Algoritmos](#adicionando-novos-algoritmos)
+- [Reprodução dos Experimentos](#reprodução-dos-experimentos-descritos-no-artigo)
+- [Publicação](#publicação)
+
+
 ## Objetivos
 
 - Comparar algoritmos clássicos (como ECDSA) e pós-quânticos (como Dilithium, Falcon, SPHINCS+).
 - Integrar novos algoritmos de forma contínua e modular.
 - Simular o impacto sistêmico dos algoritmos em ambientes blockchain.
 
-
 ## Estrutura da Ferramenta
 
 A ferramenta é dividida em três módulos principais:
 
-1. **`sign_python`**: executa os algoritmos e mede tempo de assinatura, verificação e geração de chaves.
-2. **`blocksim`**: simula redes blockchain usando os tempos coletados.
-3. **`visualization`**: gera gráficos a partir dos dados dos dois módulos anteriores.
+1. **`sign_python`**: Executa os algoritmos e mede tempo de assinatura, verificação e geração de chaves.
+2. **`blocksim`**: Simula redes blockchain usando os tempos coletados.
+3. **`visualization`**: Gera gráficos a partir dos dados dos dois módulos anteriores.
 
 ## Diretórios
 ```bash
+BlockSignPQC
 ├── algorithms/ # Implementações dos algoritmos PQC
-
+├── visualization/ # Gera gráfico
+├── save.py # Responsável por salvar saídas
+├── utils.py 
+├── simulation.py # Executa o simulador BlockSim
+└── main.py # Função principal de controle
 ```
 
 ## Pré-requisitos
@@ -47,7 +66,7 @@ Execute o comando abaixo para instalar os pré-requisitos.
 
 ## Ambiente virtual
 
-Antes de executar o BockSignPQC, é preciso ativar o ambiente virtual.
+Antes de executar o BlockSignPQC, é preciso ativar o ambiente virtual.
 
 Ativar o ambiente virtual.
 ```bash
@@ -115,23 +134,25 @@ python main.py --list-sign --levels <levels_list>
 ### Execução dos algoritmos de assinatura digital
 
 ```bash
-python main.py --sign ecdsa mldsa sphincs-shake-f falcon --runs <number_of_executions> --warp-up <number_of_executions> --levels <levels_list>
+python main.py --sign ecdsa mldsa sphincs-shake-f falcon --runs <number_of_executions> --warm-up <number_of_executions> --levels <levels_list>
 ```
 
 **Exemplo**
 ```bash
-python main.py --sig ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 1 3 5
+python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 1 3 5
 ```
 
-## Simulação
+### Simulação
 
-Use o argumento `--runs-simulat`
+Use o argumento `---runs-simulator`
 
 ## Adicionando Novos Algoritmos
 ```python
+import pandas as pd
 ALGORITHMS = {
     "algortihm_name": {
         <level_1>: "variant_name",
+        <level_2>: "variant_name",
         ...
         <level_5>: "variant_name", 
     }, ...
@@ -139,11 +160,11 @@ ALGORITHMS = {
 
 def time_evaluation(variant: str, runs: int):
     # Implementação do benchmark
-    return {
-        "sign_time": [...],
-        "verify_time": [...],
-        "keygen_time": [...]
-    }
+    return pd.DataFrame({
+        'variant': [variant] * runs,
+        'sign': time_sign,
+        'verify': time_verify
+    })
 ```
 
 ## Reprodução dos Experimentos Descritos no Artigo
