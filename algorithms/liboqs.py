@@ -80,7 +80,7 @@ ALGORITHMS = {
     }
 }
 
-def time_evaluation(variant, runs):
+def time_evaluation(variant: str, runs: int):
 
     time_keypair, time_sign, time_verify = [], [], []
 

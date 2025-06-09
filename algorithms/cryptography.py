@@ -14,7 +14,7 @@ ALGORITHMS = {
     },
 }
 
-def time_evaluation(variant, runs):
+def time_evaluation(variant: str, runs: int):
 
     curves = {
         "P-256": ec.SECP256R1(),
