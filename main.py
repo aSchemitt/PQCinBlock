@@ -4,12 +4,13 @@ import pandas as pd
 import numpy as np
 
 # Internal imports
-from sign_python.sing import executions, list_sign
+from sign_python.sing import executions, print_variants, combines_mechanisms, pqc, ecdsa
 from sign_python.rules import SIG_MECHANISMS
 from visualization.graph import generate_graphs
 import utils
 import save
 from simulator import simulator
+
 
 def main():
 
@@ -30,17 +31,38 @@ def main():
 
     # Prints the available algorithms/variants
     if args.list_sign:
-        list_sign(levels=args.levels)
+        combined_mechanisms = combines_mechanisms(
+            input_mechanisms=SIG_MECHANISMS.keys(),
+            oqs_mechanisms=oqs.get_enabled_sig_mechanisms,
+            normalizer=SIG_MECHANISMS,
+            nist_levels=args.levels,
+            oqs_cls=oqs.Signature
+        )
+
+        print_variants(combined_mechanisms)
     
     else:
         if args.sign:
             print("Algorithm run...")
 
-            dir_results, combined_mechanisms = executions(
-                signs=args.sign,
-                levels=args.levels,
+            combined_mechanisms = combines_mechanisms(
+                input_mechanisms=args.sign,
+                oqs_mechanisms=oqs.get_enabled_sig_mechanisms,
+                normalizer=SIG_MECHANISMS,
+                nist_levels=args.levels,
+                oqs_cls=oqs.Signature
+            )
+
+            print(combined_mechanisms)
+
+            dir_results = executions(
+                combined_mechanisms=combined_mechanisms,
+                input_mechanisms=args.sign,
+                nist_levels=args.levels,
                 runs=args.runs,
                 warm_up=args.warm_up,
+                oqs_time_evaluation=pqc.time_evaluation,
+                ecdsa_time_evaluation=ecdsa.time_evaluation,
             )
 
             path_csv = f"{dir_results}/time-evaluation-mean-std.csv"

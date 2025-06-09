@@ -21,15 +21,7 @@ def _run_times(mechanisms, oqs_time_evaluation, runs, warm_up, ecdsa_time_evalua
     return pd.concat(results_times)
 
 
-def _print_variants(input_mechanisms, oqs_mechanisms, normalizer, nist_levels, oqs_cls, ecds_mechanisms=None):
-
-    combined_mechanisms = combines_mechanisms(
-        input_mechanisms=input_mechanisms,
-        oqs_mechanisms=oqs_mechanisms,
-        normalizer=normalizer,
-        nist_levels=nist_levels,
-        oqs_cls=oqs_cls
-    )
+def print_variants(combined_mechanisms):
 
     for mechanism, variants in combined_mechanisms.items():
         print(f"{mechanism}:")
@@ -43,7 +35,7 @@ def combines_mechanisms(
     normalizer,
     nist_levels,
     oqs_cls
-):
+): 
 
     pqc_mechanisms_groups = utils.get_pqc_mechanisms_groups(
         input_mechanisms=input_mechanisms,
@@ -70,25 +62,15 @@ def combines_mechanisms(
 
     return combined
 
-def _evaluation(
+def executions(
+    combined_mechanisms,
     input_mechanisms,
-    oqs_mechanisms,
-    normalizer,
     nist_levels,
-    oqs_cls,
     runs,
     warm_up,
     oqs_time_evaluation=None,
     ecdsa_time_evaluation=None,
 ):
-    combined_mechanisms = combines_mechanisms(
-        input_mechanisms=input_mechanisms,
-        oqs_mechanisms=oqs_mechanisms,
-        normalizer=normalizer,
-        nist_levels=nist_levels,
-        oqs_cls=oqs_cls
-    )
-
     # time evaluation
     df_time_evaluation = _run_times(
         mechanisms=combined_mechanisms,
@@ -121,42 +103,7 @@ def _evaluation(
         mechanisms_dict=combined_mechanisms,
     )
 
-    return dir_results, combined_mechanisms
-
-def list_sign(levels):
-
-    print("Digital Signature")
-    # print(oqs.get_enabled_sig_mechanisms())
-    # print(oqs.get_supported_sig_mechanisms()) 
-
-    _print_variants(
-        input_mechanisms=SIG_MECHANISMS.keys(),
-        oqs_mechanisms=oqs.get_enabled_sig_mechanisms,
-        normalizer=SIG_MECHANISMS,
-        nist_levels=levels,
-        oqs_cls=oqs.Signature
-    )
-
-
-def executions(
-    signs,
-    levels,
-    runs,
-    warm_up,
-):
-    dir_results, combined_mechanisms = _evaluation(
-        input_mechanisms=signs,
-        oqs_mechanisms=oqs.get_enabled_sig_mechanisms,
-        normalizer=SIG_MECHANISMS,
-        nist_levels=levels,
-        oqs_cls=oqs.Signature,
-        oqs_time_evaluation=pqc.time_evaluation,
-        ecdsa_time_evaluation=ecdsa.time_evaluation,
-        runs=runs,
-        warm_up=warm_up,
-    )
-
-    return dir_results, combined_mechanisms
+    return dir_results
 
 if __name__ == "__main__":
     main()
