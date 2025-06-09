@@ -4,9 +4,6 @@ import pandas as pd
 import numpy as np
 
 # Internal imports
-# from sign_python.sing import executions, combines_mechanisms
-# from sign_python.rules import SIG_MECHANISMS
-# from visualization.graph import generate_graphs
 import sign_python as sign
 import utils
 from  simulator import simulator
@@ -49,13 +46,15 @@ def main():
     
         if args.runs_simulator:
             print("\nBlockSim run...")
-            
+
             simulator(
                 dir_results=dir_results,                 
                 input_file=path_csv, 
                 runs=args.runs_simulator,
                 variants_by_module=filtered_algorithms,
             )
+    else:
+        parser.print_help()
         
 if __name__ == "__main__":
     main()
