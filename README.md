@@ -31,7 +31,6 @@ A ferramenta é dividida em três módulos principais:
 - Python 3.11.2
 - [liboqs](https://github.com/open-quantum-safe/liboqs)
 - [liboqs-python](https://github.com/open-quantum-safe/liboqs-python)
-- Bibliotecas Python: `cryptography`, `matplotlib`, `pandas`, `numpy`
 
 ### Instalando pré-requisitos:
 
@@ -60,6 +59,21 @@ Desativar o ambiente virtual.
 deactivate
 ```
 
+## Lista de Parâmetros  
+
+Descrição dos argumentos do BlockSignPQC
+
+| Parâmetro          | Descrição                                            |
+| ------------------ | ---------------------------------------------------- |
+| `--sign`           | Lista de algoritmos de assinatura digital a serem avaliados. Suporta múltiplos valores, incluindo algoritmos clássicos (*e.g. *ECDSA*) e pós-quânticos (*e.g.* *Dilithium*, *Falcon*, *SPHINCS+*). |
+| `--runs`           | Número de execuções de cada algoritmo para coleta de métricas.                                                  |
+| `--warm-up`        | Número de execuções de aquecimento (*warm-up*) antes da medição principal, para estabilização de desempenho.    |
+| `--levels`         | Define os níveis de segurança do *NIST* (1 a 5) dos algoritmos a serem testados. Pode receber múltiplos valores.|
+| `--runs-simulator` | Número de execuções da simulação no *BlockSim*.                                                                 |
+| `--list-sign`      | Exibe todos os algoritmos de assinatura disponíveis na ferramenta.                                              |
+| `--help`           |  Exibe a mensagem de ajuda com a descrição de todos os argumentos disponíveis e instruções de uso da ferramenta.|
+
+
 ## Execução
 
 Consulte os argumentos disponíveis utilizando a opção `--help`.
@@ -68,6 +82,26 @@ Consulte os argumentos disponíveis utilizando a opção `--help`.
 python main.py --help
 ```
 
+```text
+usage: main.py [-h]
+               [--sign {sphincs-sha-f,mldsa,cross-rsdpg-balanced,cross-rsdp-fast,ecdsa,cross-rsdpg-fast,sphincs-sha-s,falcon,falcon-padded,cross-rsdp-balanced,mayo,sphincs-shake-f,cross-rsdp-small,cross-rsdpg-small,dilithium,sphincs-shake-s} [{sphincs-sha-f,mldsa,cross-rsdpg-balanced,cross-rsdp-fast,ecdsa,cross-rsdpg-fast,sphincs-sha-s,falcon,falcon-padded,cross-rsdp-balanced,mayo,sphincs-shake-f,cross-rsdp-small,cross-rsdpg-small,dilithium,sphincs-shake-s} ...]]
+               [--levels {1,2,3,4,5} [{1,2,3,4,5} ...]] [--runs RUNS] [--warm-up WARM_UP] [--list-sign] [--runs-simulator RUNS_SIMULATOR]
+
+BlockSignPQC
+
+options:
+  -h, --help            show this help message and exit
+  --sign {sphincs-sha-f,mldsa,cross-rsdpg-balanced,cross-rsdp-fast,ecdsa,cross-rsdpg-fast,sphincs-sha-s,falcon,falcon-padded,cross-rsdp-balanced,mayo,sphincs-shake-f,cross-rsdp-small,cross-rsdpg-small,dilithium,sphincs-shake-s} [{sphincs-sha-f,mldsa,cross-rsdpg-balanced,cross-rsdp-fast,ecdsa,cross-rsdpg-fast,sphincs-sha-s,falcon,falcon-padded,cross-rsdp-balanced,mayo,sphincs-shake-f,cross-rsdp-small,cross-rsdpg-small,dilithium,sphincs-shake-s} ...]
+                        Input list of digital signature algorithms (default: None)
+  --levels {1,2,3,4,5} [{1,2,3,4,5} ...], -l {1,2,3,4,5} [{1,2,3,4,5} ...]
+                        Nist levels (default: range(1, 6))
+  --runs RUNS, -r RUNS  Number of executions (default: 1)
+  --warm-up WARM_UP, -wp WARM_UP
+                        Number of executions warm up (default: 0)
+  --list-sign           List of variants digital signature algorithms (default: False)
+  --runs-simulator RUNS_SIMULATOR
+                        Number of simulator runs (default: 0)
+```
 ### Lista de variantes dos algoritmos de assinatura digital
 
 ```bash
@@ -88,3 +122,7 @@ python main.py --sign ecdsa mldsa sphincs-shake-f falcon --runs <number_of_execu
 ```bash
 python main.py --sig ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 1 3 5
 ```
+
+## Simulação
+
+Use o argumento `--runs-simulat`
