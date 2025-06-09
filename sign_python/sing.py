@@ -2,7 +2,7 @@ import pandas as pd
 import oqs
 
 # Internal imports
-from sign_python import pqc, ecdsa, utils
+from sign_python import utils
 import save
 from sign_python.rules import SIG_MECHANISMS, CURVES
 from utils import compute_mean_std

@@ -4,13 +4,13 @@ import pandas as pd
 import numpy as np
 
 # Internal imports
-from sign_python.sing import executions, print_variants, combines_mechanisms, pqc, ecdsa
+from sign_python.sing import executions, print_variants, combines_mechanisms
+from algorithms import pqc, ecdsa
 from sign_python.rules import SIG_MECHANISMS
 from visualization.graph import generate_graphs
 import utils
 import save
 from simulator import simulator
-
 
 def main():
 
@@ -52,8 +52,6 @@ def main():
                 nist_levels=args.levels,
                 oqs_cls=oqs.Signature
             )
-
-            print(combined_mechanisms)
 
             dir_results = executions(
                 combined_mechanisms=combined_mechanisms,
