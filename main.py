@@ -39,7 +39,7 @@ def main():
 
         evaluations_functions = utils.load_functions("algorithms")
 
-        dir_results = sign.executions(
+        dir_results, path_csv = sign.executions(
             levels=args.levels,
             variants_by_module=filtered_algorithms,
             evaluations_functions=evaluations_functions,
@@ -49,18 +49,12 @@ def main():
     
         if args.runs_simulator:
             print("\nBlockSim run...")
-
-            path_csv = f"{dir_results}/time-evaluation-mean-std.csv"
-
-            combined_mechanisms = {}
-            for algorithm in filtered_algorithms.values():
-                combined_mechanisms.update(algorithm)
-
+            
             simulator(
                 dir_results=dir_results,                 
                 input_file=path_csv, 
                 runs=args.runs_simulator,
-                combined_mechanisms=combined_mechanisms,
+                variants_by_module=filtered_algorithms,
             )
         
 if __name__ == "__main__":

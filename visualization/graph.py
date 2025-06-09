@@ -14,8 +14,6 @@ def generate_graphs(
     error_offset,
     log_xticks,
     log_xlim,
-    # linear_xticks,
-    # linear_xlim,
     show_graph=False,
     show_values=True,
     show_erros=True,
