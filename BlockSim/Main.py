@@ -6,6 +6,7 @@ import csv
 import os
 import sys
 import pandas as pd
+from time import time
 
 if p.model == 3:
     from BlockSim.Models.AppendableBlock.BlockCommit import BlockCommit
@@ -43,8 +44,9 @@ elif p.model == 0:
 def blocksim(input_file, output_file, runs):
     try:         
         df = pd.read_csv(input_file, index_col=False)
-        for index, line in df.iterrows():                
-            p.variant = line["variant"]                
+        for index, line in df.iterrows():
+            p.variant = line["variant"]
+            print(f"Running {p.variant}...")
             try:                
                 mean_verify = float(line["mean_verify"])
                 std_verify = float(line["std_verify"])
@@ -55,6 +57,7 @@ def blocksim(input_file, output_file, runs):
             try:
                 # for i in range(p.Runs):
                 for i in range(runs):
+                    # start_simulation = time()
                     clock = 0  # set clock to 0 at the start of the simulation
                     if p.hasTrans:
                         if p.Ttechnique == "Light":
@@ -79,7 +82,8 @@ def blocksim(input_file, output_file, runs):
 
                         if i == 0 and p.VerifyImplemetation:
                             Verification.perform_checks()
-
+                    # end_simulation = time()
+                    # print((end_simulation - start_simulation) * 1000)
                     Consensus.fork_resolution()  # apply the longest chain to resolve the forks
                     # distribute the rewards between the particiapting nodes
                     Incentives.distribute_rewards()
