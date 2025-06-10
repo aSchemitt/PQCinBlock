@@ -25,7 +25,7 @@ de redes blockchain por meio da integração com o simulador BlockSim.
 
 ## Objetivos
 
-- Comparar algoritmos clássicos (e.g., ECDSA) e pós-quânticos (e.g., Dilithium, Falcon, SPHINCS+).
+- Comparar algoritmos clássicos (*e.g.* *ECDSA*) e pós-quânticos (*e.g.* *Dilithium*, *Falcon*, *SPHINCS+*).
 - Integrar novos algoritmos de forma contínua e modular.
 - Simular o impacto sistêmico dos algoritmos em ambientes blockchain.
 
@@ -141,7 +141,7 @@ O comando abaixo exibe todos os algoritmos de assinatura digital disponíveis na
 python main.py --list-sign
 ```
 
-Você também pode limitar a exibição a variantes de níveis específicos de segurança (NIST level):
+Também é possível limitar a exibição às variantes de níveis específicos de segurança (NIST levels):
 ```bash
 python main.py --list-sign --levels <nist_levels>
 ```
@@ -166,7 +166,7 @@ python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 
 
 ### Simulação no BlockSim
 
-Use o argumento `--runs-simulator` para informar quantas vezes cada variante será executada cada uma das variantes no simulador.
+Use o argumento `--runs-simulator` para informar quantas vezes cada variante será executada no simulador.
 ```bash
 python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 1 3 5 --runs-simulator 5
 ```
@@ -178,7 +178,8 @@ Para adicionar um novo algoritmo, crie um arquivo `.py` dentro de `algorithms/` 
 import pandas as pd
 
 ALGORITHMS = {
-    # Não é necessário ter todos os níveis
+    # Os níveis (1 a 5) podem ser definidos conforme a disponibilidade do algoritmo.
+    # Não é obrigatório preencher todos os níveis.
     "algorithm_name": {
         <level_1>: "variant_name",
         <level_2>: "variant_name",
@@ -221,6 +222,6 @@ Execute os experimentos descritos no artigo com o comando:
 
 ## Publicação
 
-Esta ferramenta foi submetida ao SBSeg 2025, como parte do artigo:
+Esta ferramenta foi submetida ao **SBSeg 2025**, como parte do artigo:
 
-> BlockSignPQC: um benchmark para avaliação de algoritmos de assinatura digital pós-quântica em blockchains.
+> *BlockSignPQC: um benchmark para avaliação de algoritmos de assinatura digital pós-quântica em blockchains.*
