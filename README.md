@@ -21,6 +21,7 @@ de redes blockchain por meio da integração com o simulador BlockSim.
 - [Adicionando Novos Algoritmos](#adicionando-novos-algoritmos)
 - [Reprodução dos Experimentos](#reprodução-dos-experimentos-descritos-no-artigo)
 - [Publicação](#publicação)
+- [Licença](#licença)
 
 
 ## Objetivos
