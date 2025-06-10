@@ -93,7 +93,7 @@ deactivate
 
 ## Lista de Parâmetros  
 
-Descrição dos argumentos do BlockSignPQC
+Descrição dos argumentos do BlockSignPQC.
 
 | Parâmetro          | Descrição                                            |
 | ------------------ | ---------------------------------------------------- |
@@ -134,25 +134,38 @@ options:
   --runs-simulator RUNS_SIMULATOR
                         Number of simulator runs (default: 0)
 ```
+
 ### Lista de Algoritmo e suas Variantes
+
+O comando abaixo exibe todos os algoritmos de assinatura digital disponíveis na ferramenta, tanto clássicos quanto pós-quânticos:
 
 ```bash
 python main.py --list-sign
 ```
-ou
+
+Você também pode limitar a exibição a variantes de níveis específicos de segurança (NIST level):
+
 ```bash
-python main.py --list-sign --levels <levels_list>
+python main.py --list-sign --levels <nist_levels>
+```
+
+**Exemplo:**
+
+```bash
+python main.py --list-sign --levels 1 3 5
 ```
 
 ### Execução dos Algoritmos
 
+Use o comando abaixo para executar os testes de desempenho (sign, verify) dos algoritmos desejados, especificando:
+
 ```bash
-python main.py --sign ecdsa mldsa sphincs-shake-f falcon --runs <number_of_executions> --warm-up <number_of_executions> --levels <levels_list>
+python main.py --sign <algorithms> --runs <n> --warm-up <n> --levels <nist_levels>
 ```
 
 **Exemplo**
 ```bash
-python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 1 3 5
+python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 3 5
 ```
 
 ### Simulação no BlockSim
