@@ -36,7 +36,7 @@ def main():
     # Generates the execution graphs
     generate_graphs(
         path_csv=path_csv,
-        dir_results=dir_results,
+        dir_results=f"{dir_results}algorithm-runs",
         mechanisms_dict=combined_mechanisms,
         columns=[
                 # ("mean_keypair", "std_keypair", "Geração de chaves"),
