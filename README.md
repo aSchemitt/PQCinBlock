@@ -1,7 +1,7 @@
 # BlockSignPQC
 
 <!-- link aqui -->
-[Vídeo de demonstração](https://youtu.be/NxxU091j2Lo)
+[Vídeo de demonstração](https://youtu.be/CNKmvOyZqm0)
 
 **BlockSignPQC** é um benchmark modular e extensível para avaliação de 
 algoritmos de assinatura digital pós-quântica (PQC) em sistemas blockchain.
