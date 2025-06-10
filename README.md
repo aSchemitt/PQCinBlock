@@ -1,7 +1,7 @@
 # BlockSignPQC
 
 <!-- link aqui -->
-[Vídeo de demostração]()
+[Vídeo de demonstração]()
 
 **BlockSignPQC** é um benchmark modular e extensível para avaliação de 
 algoritmos de assinatura digital pós-quântica (PQC) em sistemas blockchain.
@@ -39,13 +39,22 @@ A ferramenta é dividida em três módulos principais:
 
 ## Diretórios
 ```bash
-BlockSignPQC
-├── algorithms/ # Implementações dos algoritmos PQC
-├── visualization/ # Gera gráfico
-├── save.py # Responsável por salvar saídas
-├── utils.py 
-├── simulation.py # Executa o simulador BlockSim
-└── main.py # Função principal de controle
+BlockSignPQC/
+├── algorithms/           # Implementações dos algoritmos PQC (com ALGORITHMS e time_evaluation)
+├── BlockSim/             # Código-fonte do simulador de blockchain (BlockSim)
+├── results/              # Resultados de execução em CSV e gráficos
+├── visualization/        # Geração de gráficos a partir das execuções
+├── venv/                 # Ambiente virtual Python (não versionado)
+├── graph.py              # Script auxiliar de geração de gráficos
+├── install.sh            # Script de instalação principal
+├── main.py               # Script principal que orquestra todas as etapas
+├── README.md             # Este arquivo de documentação
+├── requirements.txt      # Dependências Python necessárias
+├── run_experiment.sh     # Executa todos os experimentos descritos no artigo
+├── save.py               # Funções de salvamento de resultados
+├── sign_python.py        # Módulo de benchmark de algoritmos de assinatura
+├── simulator.py          # Interface e execução do BlockSim com os dados obtidos
+├── utils.py              # Funções utilitárias auxiliares
 ```
 
 ## Pré-requisitos
@@ -56,7 +65,8 @@ BlockSignPQC
 
 ### Instalando pré-requisitos:
 
-Conceda permissão de execução ao script de instalação usando o comando
+Conceda permissão de execução ao script de instalação usando o comando.
+
 ```bash
 chmod +x install.sh
 ```
@@ -124,7 +134,7 @@ options:
   --runs-simulator RUNS_SIMULATOR
                         Number of simulator runs (default: 0)
 ```
-### Lista de variantes dos algoritmos de assinatura digital
+### Lista de Algoritmo e suas Variantes
 
 ```bash
 python main.py --list-sign
@@ -134,7 +144,7 @@ ou
 python main.py --list-sign --levels <levels_list>
 ```
 
-### Execução dos aAgoritmos de Assinatura digital
+### Execução dos Algoritmos
 
 ```bash
 python main.py --sign ecdsa mldsa sphincs-shake-f falcon --runs <number_of_executions> --warm-up <number_of_executions> --levels <levels_list>
@@ -145,11 +155,18 @@ python main.py --sign ecdsa mldsa sphincs-shake-f falcon --runs <number_of_execu
 python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 1 3 5
 ```
 
-### Simulação (BlockSim)
+### Simulação no BlockSim
 
-Use o argumento `---runs-simulator`
+Use o argumento `--runs-simulator` para informar quantas vezes cada variante será executada cada uma das variantes no simulador.
+
+```bash
+python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 1 3 5 --runs-simulator 5
+```
 
 ## Adicionando Novos Algoritmos
+
+Para adicionar um novo algoritmo, crie um arquivo `.py` dentro de `algorithms/` com a estrutura abaixo:
+
 ```python
 import pandas as pd
 
