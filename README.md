@@ -225,3 +225,8 @@ Execute os experimentos descritos no artigo com o comando:
 Esta ferramenta foi submetida ao **SBSeg 2025**, como parte do artigo:
 
 > *BlockSignPQC: um benchmark para avaliação de algoritmos de assinatura digital pós-quântica em blockchains.*
+
+
+## Licença
+
+Este projeto é distribuído sob a licença MIT. Consulte o arquivo [`LICENSE`](./LICENSE) para mais detalhes.
