@@ -25,7 +25,7 @@ de redes blockchain por meio da integração com o simulador BlockSim.
 
 ## Objetivos
 
-- Comparar algoritmos clássicos (como ECDSA) e pós-quânticos (como Dilithium, Falcon, SPHINCS+).
+- Comparar algoritmos clássicos (e.g., ECDSA) e pós-quânticos (e.g., Dilithium, Falcon, SPHINCS+).
 - Integrar novos algoritmos de forma contínua e modular.
 - Simular o impacto sistêmico dos algoritmos em ambientes blockchain.
 
@@ -42,7 +42,7 @@ A ferramenta é dividida em três módulos principais:
 BlockSignPQC/
 ├── algorithms/           # Implementações dos algoritmos PQC (com ALGORITHMS e time_evaluation)
 ├── BlockSim/             # Código-fonte do simulador de blockchain (BlockSim)
-├── results/              # Resultados de execução em CSV e gráficos
+├── results/              # Resultados de execução em CSV e gráficos (não versionado)
 ├── visualization/        # Geração de gráficos a partir das execuções
 ├── venv/                 # Ambiente virtual Python (não versionado)
 ├── graph.py              # Script auxiliar de geração de gráficos
@@ -66,10 +66,10 @@ BlockSignPQC/
 ### Instalando pré-requisitos:
 
 Conceda permissão de execução ao script de instalação usando o comando.
-
 ```bash
 chmod +x install.sh
 ```
+
 Execute o comando abaixo para instalar os pré-requisitos.
 ```bash
 ./install.sh
@@ -93,7 +93,7 @@ deactivate
 
 ## Lista de Parâmetros  
 
-Descrição dos argumentos do BlockSignPQC.
+**Descrição dos argumentos do BlockSignPQC.**
 
 | Parâmetro          | Descrição                                            |
 | ------------------ | ---------------------------------------------------- |
@@ -109,7 +109,6 @@ Descrição dos argumentos do BlockSignPQC.
 ## Execução
 
 Consulte os argumentos disponíveis utilizando a opção `--help`.
-
 ```bash
 python main.py --help
 ```
@@ -138,13 +137,11 @@ options:
 ### Lista de Algoritmo e suas Variantes
 
 O comando abaixo exibe todos os algoritmos de assinatura digital disponíveis na ferramenta, tanto clássicos quanto pós-quânticos:
-
 ```bash
 python main.py --list-sign
 ```
 
 Você também pode limitar a exibição a variantes de níveis específicos de segurança (NIST level):
-
 ```bash
 python main.py --list-sign --levels <nist_levels>
 ```
@@ -158,7 +155,6 @@ python main.py --list-sign --levels 1 3 5
 ### Execução dos Algoritmos
 
 Use o comando abaixo para executar os testes de desempenho (sign, verify) dos algoritmos desejados, especificando:
-
 ```bash
 python main.py --sign <algorithms> --runs <n> --warm-up <n> --levels <nist_levels>
 ```
@@ -171,7 +167,6 @@ python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 
 ### Simulação no BlockSim
 
 Use o argumento `--runs-simulator` para informar quantas vezes cada variante será executada cada uma das variantes no simulador.
-
 ```bash
 python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 1 3 5 --runs-simulator 5
 ```
@@ -179,12 +174,11 @@ python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 
 ## Adicionando Novos Algoritmos
 
 Para adicionar um novo algoritmo, crie um arquivo `.py` dentro de `algorithms/` com a estrutura abaixo:
-
 ```python
 import pandas as pd
 
 ALGORITHMS = {
-    # Não é necessário ter todos os levels
+    # Não é necessário ter todos os níveis
     "algorithm_name": {
         <level_1>: "variant_name",
         <level_2>: "variant_name",
@@ -209,14 +203,17 @@ Clone esse repositório.
 ```bash
 git clone https://github.com/PQC-PQS/BlockSignPQC.git
 ```
+
 Conceda permissão de execução para os scripts `install.sh` e `run.sh`.
 ```bash
 chmod +x install.sh run.sh
 ```
+
 Execute o comando abaixo para instalar os pré-requisitos.
 ```bash
 ./install.sh
 ```
+
 Execute os experimentos descritos no artigo com o comando:
 ```bash
 ./run_experiment.sh
