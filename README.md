@@ -1,5 +1,8 @@
 # BlockSignPQC
 
+<!-- link aqui -->
+[Vídeo de demostração]()
+
 **BlockSignPQC** é um benchmark modular e extensível para avaliação de 
 algoritmos de assinatura digital pós-quântica (PQC) em sistemas blockchain.
 Ele permite medições diretas de desempenho criptográfico e simulações realistas
@@ -131,7 +134,7 @@ ou
 python main.py --list-sign --levels <levels_list>
 ```
 
-### Execução dos algoritmos de assinatura digital
+### Execução dos aAgoritmos de Assinatura digital
 
 ```bash
 python main.py --sign ecdsa mldsa sphincs-shake-f falcon --runs <number_of_executions> --warm-up <number_of_executions> --levels <levels_list>
@@ -142,19 +145,22 @@ python main.py --sign ecdsa mldsa sphincs-shake-f falcon --runs <number_of_execu
 python main.py --sign ecdsa mldsa falcon sphincs-sha-s sphincs-shake-f --runs 5 --warm-up 5 --levels 1 3 5
 ```
 
-### Simulação
+### Simulação (BlockSim)
 
 Use o argumento `---runs-simulator`
 
 ## Adicionando Novos Algoritmos
 ```python
 import pandas as pd
+
 ALGORITHMS = {
-    "algortihm_name": {
+    # Não é necessário ter todos os levels
+    "algorithm_name": {
         <level_1>: "variant_name",
         <level_2>: "variant_name",
-        ...
-        <level_5>: "variant_name", 
+        <level_3>: "variant_name",
+        <level_4>: "variant_name",
+        <level_5>: "variant_name",
     }, ...
 }
 
@@ -177,13 +183,17 @@ Conceda permissão de execução para os scripts `install.sh` e `run.sh`.
 ```bash
 chmod +x install.sh run.sh
 ```
+Execute o comando abaixo para instalar os pré-requisitos.
+```bash
+./install.sh
+```
 Execute os experimentos descritos no artigo com o comando:
 ```bash
-./run.sh
+./run_experiment.sh
 ```
 
 ## Publicação
 
-Esta ferramenta foi apresentada no SBSeg 2025, como parte do artigo:
+Esta ferramenta foi submetida ao SBSeg 2025, como parte do artigo:
 
 > BlockSignPQC: um benchmark para avaliação de algoritmos de assinatura digital pós-quântica em blockchains.
