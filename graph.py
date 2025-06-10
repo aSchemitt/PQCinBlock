@@ -4,8 +4,7 @@ import oqs
 import numpy as np
 
 from visualization.graph import generate_graphs
-from sign_python.sing import combines_mechanisms
-from sign_python.rules import SIG_MECHANISMS
+import utils
 
 def main():
 
@@ -14,7 +13,9 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     
-    parser.add_argument("--sign", help="Input list of digital signature algorithms", type=str, nargs="+", choices=list(SIG_MECHANISMS.keys()))
+    all_algorithms = utils.load_algorithms("algorithms")
+    
+    parser.add_argument("--sign", help="Input list of digital signature algorithms", type=str, nargs="+", choices=list(utils.extract_algorithms(all_algorithms)))
     parser.add_argument("--levels", "-l", help="Nist levels", type=int, choices=range(1, 6), default=(range(1,6)), nargs="+")
     parser.add_argument("--dir", type=str)
 
@@ -22,15 +23,14 @@ def main():
 
     dir_results = args.dir
 
-    combined_mechanisms = combines_mechanisms(
-        input_mechanisms=args.sign,
-        oqs_mechanisms=oqs.get_enabled_sig_mechanisms,
-        normalizer=SIG_MECHANISMS,
-        nist_levels=args.levels,
-        oqs_cls=oqs.Signature
-    )
+    filtered_algorithms = utils.filter_algorithms(all_algorithms, args.sign, args.levels)
 
-    path_csv = f"{dir_results}/time-evaluation-mean-std.csv"
+    combined_mechanisms = {}
+    for algorithm in filtered_algorithms.values():
+        combined_mechanisms.update(algorithm)
+
+
+    path_csv = f"{dir_results}algorithm-runs/time-evaluation-mean-std.csv"
 
 
     # Generates the execution graphs
