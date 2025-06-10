@@ -221,6 +221,8 @@ Execute os experimentos descritos no artigo com o comando:
 ./run_experiment.sh
 ```
 
+>Os resultados completos dos experimentos utilizados no artigo estão disponíveis no diretório: [resultados-experimento](./resultados-experimento/)
+
 ## Publicação
 
 Esta ferramenta foi submetida ao **SBSeg 2025**, como parte do artigo:
