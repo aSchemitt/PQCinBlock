@@ -145,8 +145,8 @@ def generate_plots_from_csv(
     xlim,
     xticks,
     width=0.85,
-    xlabel="Tempo médio (ms)",
-    ylabel="Algoritmos",    
+    xlabel="Average time (ms)",
+    ylabel="Algorithms",
     figsize=(16, 9),
     save_formats=("svg", "png"),
 ):

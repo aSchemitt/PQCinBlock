@@ -39,9 +39,8 @@ def main():
         dir_results=f"{dir_results}algorithm-runs",
         mechanisms_dict=combined_mechanisms,
         columns=[
-                # ("mean_keypair", "std_keypair", "Geração de chaves"),
-                ("mean_sign", "std_sign", "Assinatura"),
-                ("mean_verify", "std_verify", "Verificação"),
+                ("mean_sign", "std_sign", "Creation"),
+                ("mean_verify", "std_verify", "Verification"),
             ],
         show_legend=True,
         values_offset=0.2,
@@ -62,9 +61,7 @@ def main():
         dir_results=dir_simulator,
         mechanisms_dict=combined_mechanisms,
         columns=[
-            # ("mean_keypair", "std_keypair", "Geração de chaves"),
-            # ("mean_sign", "std_sign", "Assinatura"),
-            ("mean_verify", "std_verify", "Verificação"),
+            ("mean_verify", "std_verify", "Verification"),
         ],
         values_offset=0.2,
         error_offset=1.05,

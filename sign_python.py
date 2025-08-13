@@ -95,9 +95,8 @@ def executions(
         dir_results=algorithms_runs_directory,
         mechanisms_dict=combined_mechanisms,
         columns=[
-                # ("mean_keypair", "std_keypair", "Geração de chaves"),
-                ("mean_sign", "std_sign", "Assinatura"),
-                ("mean_verify", "std_verify", "Verificação"),
+                ("mean_sign", "std_sign", "Creation"),
+                ("mean_verify", "std_verify", "Verification"),
             ],
         show_legend=True,
         values_offset=0.2,
