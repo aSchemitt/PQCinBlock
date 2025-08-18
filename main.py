@@ -99,7 +99,7 @@ def _run_from_sign_algorithms_and_simulator(args, filtered_algorithms):
     """Handles the logic when the script is run with --sign arguments."""
     import graph
 
-    print("\nAlgorithms run...")
+    print("\nBenchmark run...")
 
     evaluations_functions = utils.load_functions(ALGORITHMS_DIR)
 
