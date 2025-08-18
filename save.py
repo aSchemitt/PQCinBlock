@@ -1,4 +1,4 @@
-from os import path, makedirs
+from pathlib import Path
 from datetime import datetime
 
 DIR_RESULTS = "results"
@@ -19,7 +19,7 @@ def _mounts_results_directory(algorithms_dict, levels):
 
     base_dir = f"{timestamp}_{mechanisms_str}_levels-{levels_str}"
     
-    full_path = path.join(DIR_RESULTS, base_dir)
+    full_path = Path(DIR_RESULTS) / base_dir
 
     return full_path
 
@@ -28,12 +28,12 @@ def _save_csv(df, file):
 
 def _create_directory(root_directory, directory_name=None):
     if directory_name:
-        directory = path.join(root_directory, directory_name)
-        makedirs(directory, exist_ok=True)
+        directory = Path(root_directory) / directory_name
+        directory.mkdir(parents=True, exist_ok=True)
         return directory
     else:
-        makedirs(root_directory, exist_ok=True)
-        return root_directory
+        Path(root_directory).mkdir(parents=True, exist_ok=True)
+        return Path(root_directory)
 
 def create_results_directory(algorithms_dict, levels):
     results_directory = _mounts_results_directory(algorithms_dict, levels)
@@ -57,9 +57,8 @@ def save_results_algorithm_runs(dfs, algorithms_dict, levels):
     algorithms_runs_directory = create_algorithms_runs_directory(results_directory)
     
     for key, df in dfs.items():
-        file = f"{algorithms_runs_directory}/{key}.csv"
+        file = algorithms_runs_directory / f"{key}.csv"
         _save_csv(df, file)
         print(f"{file}")
     
-    return results_directory, algorithms_runs_directory, 
-
+    return results_directory, algorithms_runs_directory

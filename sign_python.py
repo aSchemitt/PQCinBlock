@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
+from pathlib import Path
 
 # Internal imports
 import utils
 import save
-from visualization.graph import generate_graphs
 
 def _run_selected_variants(variants_by_module, functions, runs=5, warm_up=1):
     results = []
@@ -83,26 +83,6 @@ def executions(
         levels=levels
     )
     
-    path_csv = f"{algorithms_runs_directory}/time-evaluation-mean-std.csv"
+    path_csv = algorithms_runs_directory / "time-evaluation-mean-std.csv"
 
-    combined_mechanisms = {}
-    for algorithm in variants_by_module.values():
-        combined_mechanisms.update(algorithm)
-
-    # Generates the execution graphs
-    generate_graphs(
-        path_csv=path_csv,
-        dir_results=algorithms_runs_directory,
-        mechanisms_dict=combined_mechanisms,
-        columns=[
-                ("mean_sign", "std_sign", "Creation"),
-                ("mean_verify", "std_verify", "Verification"),
-            ],
-        show_legend=True,
-        values_offset=0.2,
-        error_offset=1.05,
-        log_xticks=np.logspace(-3, 4, num=8, base=10),
-        log_xlim=(1e-3, 1e4),
-    )
-
-    return dir_results, path_csv
+    return dir_results, str(path_csv)
