@@ -5,6 +5,7 @@ source venv/bin/activate
 python main.py --sign \
     ecdsa \
     mldsa \
+    dilithium \
     falcon \
     falcon-padded \
     mayo \
