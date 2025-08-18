@@ -1,75 +1,61 @@
-import sys
-import argparse
-import oqs
 import numpy as np
+from pathlib import Path
 
 from visualization.graph import generate_graphs
-import utils
 
-def main():
+def generate_all_graphs(dir_results, mechanisms_dict, simulator_was_run=False):
+    """
+    Generates all graphs for the experiment, including algorithm performance
+    and simulator results.
 
-    parser = argparse.ArgumentParser(
-        description="Graph BlockSignPQC",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    
-    all_algorithms = utils.load_algorithms("algorithms")
-    
-    parser.add_argument("--sign", help="Input list of digital signature algorithms", type=str, nargs="+", choices=list(utils.extract_algorithms(all_algorithms)))
-    parser.add_argument("--levels", "-l", help="Nist levels", type=int, choices=range(1, 6), default=(range(1,6)), nargs="+")
-    parser.add_argument("--dir", type=str)
+    Args:
+        dir_results (str or Path): The main results directory.
+        mechanisms_dict (dict): A dictionary of the mechanisms used.
+        simulator_was_run (bool): Flag indicating if the simulator was executed.
+    """
+    dir_results = Path(dir_results)
+    algorithm_runs_dir = dir_results / "algorithm-runs"
+    simulator_dir = dir_results / "simulator"
 
-    args = parser.parse_args()
-
-    dir_results = args.dir
-
-    filtered_algorithms = utils.filter_algorithms(all_algorithms, args.sign, args.levels)
-
-    combined_mechanisms = {}
-    for algorithm in filtered_algorithms.values():
-        combined_mechanisms.update(algorithm)
-
-
-    path_csv = f"{dir_results}algorithm-runs/time-evaluation-mean-std.csv"
-
-
-    # Generates the execution graphs
-    generate_graphs(
-        path_csv=path_csv,
-        dir_results=f"{dir_results}algorithm-runs",
-        mechanisms_dict=combined_mechanisms,
-        columns=[
+    # Generate graphs for algorithm performance
+    path_csv_sign = algorithm_runs_dir / "time-evaluation-mean-std.csv"
+    if path_csv_sign.exists():
+        print("\nGenerating algorithm performance graphs...")
+        generate_graphs(
+            path_csv=str(path_csv_sign),
+            dir_results=str(algorithm_runs_dir),
+            mechanisms_dict=mechanisms_dict,
+            columns=[
                 ("mean_sign", "std_sign", "Creation"),
                 ("mean_verify", "std_verify", "Verification"),
             ],
-        show_legend=True,
-        values_offset=0.2,
-        error_offset=1.05,
-        log_xticks=np.logspace(-3, 4, num=8, base=10),
-        log_xlim=(1e-3, 1e4),
-        # linear_xticks=np.linspace(0, 4, num=4),
-        # linear_xlim=(0, 4),
-    )
+            show_legend=True,
+            values_offset=0.2,
+            error_offset=1.05,
+            log_xticks=np.logspace(-3, 4, num=8, base=10),
+            log_xlim=(1e-3, 1e4),
+        )
+    else:
+        print(f"\nWarning: Algorithm CSV file not found, skipping algorithm graphs: {path_csv_sign}")
 
-    dir_simulator = f"{dir_results}simulator"
-
-    output_blocksim_mean_std = f"{dir_simulator}/blocksim-mean-std.csv"
-
-    # Generates the simulator graphs
-    generate_graphs(
-        path_csv=output_blocksim_mean_std,
-        dir_results=dir_simulator,
-        mechanisms_dict=combined_mechanisms,
-        columns=[
-            ("mean_verify", "std_verify", "Verification"),
-        ],
-        values_offset=0.2,
-        error_offset=1.05,
-        log_xticks=np.logspace(-2, 4, num=7, base=10),
-        log_xlim=(1e-2, 1e4),
-        # linear_xticks=np.linspace(0, 4, num=6),
-        # linear_xlim=(0, 4),
-    )
-    
-if __name__ == "__main__":
-    main()
+    # Generate graphs for simulator results
+    path_csv_simulator = simulator_dir / "blocksim-mean-std.csv"
+    if path_csv_simulator.exists():
+        print("\nGenerating simulator results graphs...")
+        generate_graphs(
+            path_csv=str(path_csv_simulator),
+            dir_results=str(simulator_dir),
+            mechanisms_dict=mechanisms_dict,
+            columns=[
+                ("mean_verify", "std_verify", "Verification"),
+            ],
+            values_offset=0.2,
+            error_offset=1.05,
+            log_xticks=np.logspace(-2, 4, num=7, base=10),
+            log_xlim=(1e-2, 1e4),
+        )
+    else:
+        if simulator_was_run:
+            print(f"\nWarning: Simulator output CSV not found, skipping simulator graphs: {path_csv_simulator}")
+        else:
+            print("\nSimulator not executed, skipping simulator graphs.")

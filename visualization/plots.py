@@ -190,6 +190,19 @@ def generate_plots_from_csv(
         df_subset = df.loc[variant_names]
 
         df_subset["algorithm"] = df_subset.index.map(variant_to_algorithm)
+
+        # Check for positive data if log scale is requested for this subset
+        effective_xscale = xscale
+        if xscale == "log":
+            has_positive_data = False
+            for val_col, _, _ in columns:
+                # Drop NaN values before checking for positive data
+                if val_col in df_subset.columns and (df_subset[val_col].dropna() > 0).any():
+                    has_positive_data = True
+                    break
+            if not has_positive_data:
+                effective_xscale = "linear"
+                print(f"\nWarning: No positive data for level {level} to plot with log scale. Switching to linear scale.")
         
         plot_horizontal(
             df_all=df_subset, 
@@ -205,7 +218,7 @@ def generate_plots_from_csv(
             yticklabels="algorithm",
             figsize=figsize,
             width=width,
-            xscale=xscale,
+            xscale=effective_xscale,
             # title=f"Nível {level}",
             show_graph=show_graph,
             show_values=show_values,
