@@ -1,7 +1,7 @@
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.exceptions import InvalidSignature
-from time import time
+from time import perf_counter
 import random
 import string
 import pandas as pd
@@ -34,34 +34,34 @@ def time_evaluation(variant: str, runs: int):
 
         message = ''.join(random.choices(string.ascii_letters + string.digits, k=60)).encode("utf-8")
 
-        start_keypair = time()
+        start_keypair = perf_counter()
         sk = ec.generate_private_key(curve)
         pk = sk.public_key()
-        end_keypair = time()
+        end_keypair = perf_counter()
 
         time_keypair.append((end_keypair - start_keypair) * 1000)
 
-        start_sign=time()
+        start_sign=perf_counter()
         signature = sk.sign(
             message,
             ec.ECDSA(hashes.SHA256())
         )
-        end_sign=time()
+        end_sign=perf_counter()
     
         time_sign.append((end_sign - start_sign) * 1000)
 
         try:
-            start_verify=time()
+            start_verify=perf_counter()
             pk.verify(
                 signature,
                 message,
                 ec.ECDSA(hashes.SHA256())
             )
-            end_verify=time()
+            end_verify=perf_counter()
         except InvalidSignature:
             print(f"WARNING: Verification failed at iteration {i}!")
         
-        time_verify.append((end_verify - start_sign) * 1000)
+        time_verify.append((end_verify - start_verify) * 1000)
 
     return pd.DataFrame({
         'variant': [variant] * runs,

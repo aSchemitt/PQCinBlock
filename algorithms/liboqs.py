@@ -1,4 +1,4 @@
-from time import time
+from time import perf_counter
 import pandas as pd
 import random
 import string
@@ -94,9 +94,9 @@ def time_evaluation(variant: str, runs: int):
         with oqs.Signature(variant) as signer, oqs.Signature(variant) as verifier:
 
             # Signer generates its keypair
-            start_keypair = time()
+            start_keypair = perf_counter()
             signer_public_key = signer.generate_keypair()
-            end_keypair = time()
+            end_keypair = perf_counter()
 
             time_keypair.append((end_keypair - start_keypair) * 1000)
 
@@ -108,16 +108,16 @@ def time_evaluation(variant: str, runs: int):
             # signer = oqs.Signature(sigalg, secret_key)
 
             # Signer signs the message
-            start_sign = time()
+            start_sign = perf_counter()
             signature = signer.sign(message)
-            end_sign = time()
+            end_sign = perf_counter()
 
             time_sign.append((end_sign - start_sign) * 1000)
 
             # Verifier verifies the signature
-            start_verify = time()
+            start_verify = perf_counter()
             is_valid = verifier.verify(message, signature, signer_public_key)
-            end_verify = time()
+            end_verify = perf_counter()
 
             time_verify.append((end_verify - start_verify) * 1000)
 
@@ -130,14 +130,3 @@ def time_evaluation(variant: str, runs: int):
         'sign': time_sign,
         'verify': time_verify
     })
-
-# def size_evaluation(variant):
-    
-#     with oqs.Signature(variant) as sig:
-#         return {
-#             'variant': variant,
-#             'nist_level': sig.details['claimed_nist_level'],
-#             'public_key': sig.details['length_public_key'],
-#             'secret_key': sig.details['length_secret_key'],
-#             'signature': sig.details['length_signature']
-#         }
