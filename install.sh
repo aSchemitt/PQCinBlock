@@ -13,9 +13,14 @@ LIBOQS_PYTHON_TAG="0.12.0"
 # =============================
 # Dependencies
 # =============================
-echo "Installing system dependencies..."
-sudo apt update -y
-sudo apt install -y build-essential git cmake libssl-dev wget unzip python3 python3-venv python3-pip
+if command -v apt >/dev/null 2>&1; then
+  echo "apt found "
+  echo "Installing system dependencies..."
+  sudo apt update -y
+  sudo apt install -y build-essential git cmake libssl-dev wget unzip python3 python3-venv python3-pip
+else
+  echo "apt not found. please install git cmake libssl-dev wget unzip python3 python3-venv python3-pip  "
+fi
 
 # =============================
 # Install liboqs

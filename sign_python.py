@@ -5,6 +5,8 @@ from pathlib import Path
 # Internal imports
 import utils
 import save
+import logging 
+import sys
 
 def _run_selected_variants(variants_by_module, functions, runs=5, warm_up=1):
     results = []
@@ -15,10 +17,13 @@ def _run_selected_variants(variants_by_module, functions, runs=5, warm_up=1):
         for module, variants in variants_by_module.items()
         for algorithm in variants
     }
-
+    
     for algorithm, module in variant_to_module.items():
+        logging.info("")
+        logging.info(f"\tAlgorithm: {algorithm}")
+
         if module not in functions:
-            print(f"No function available for '{algorithm}'.")
+            logging.info(f"No function available for '{algorithm}'.")
             continue
 
         func = functions[module]
@@ -26,7 +31,7 @@ def _run_selected_variants(variants_by_module, functions, runs=5, warm_up=1):
 
         for level, variant in levels.items():
             try:
-                print(f"Running {variant} ({algorithm}) with {module}.py...")
+                logging.info(f"\t\tRunning algorithm:{algorithm}\tlevel:{level}\tvariant:{variant}  (using {module}.py)...")
                 # Warm-up
                 func(variant, runs=warm_up)
                 # Runs
@@ -34,17 +39,21 @@ def _run_selected_variants(variants_by_module, functions, runs=5, warm_up=1):
                 df["algorithm"] = algorithm
                 df["level"] = level
                 results.append(df)
+
             except Exception as e:
-                print(f"Error: {module}/{variant}: {e}")
+                logging.error(f"\t\tError: {module}/{variant}: {e}")
+                sys.exit(-1)
 
     return pd.concat(results, ignore_index=True) if results else pd.DataFrame()
 
 def print_by_variants(filtered_algorithms: dict):
     for module, algorithms in filtered_algorithms.items():
         for mechanism, variants in algorithms.items():
-            print(f"{mechanism}:")
+            logging.info(f"\t{mechanism} - begin")
             for level, variant in sorted(variants.items()):
-                print(f"{' ' * 4}{variant} - NIST Level {level}")
+                logging.info(f"\t\t{' ' * 4}{variant} - NIST Level {level}")
+            logging.info(f"\t{mechanism} - end")
+            logging.info()
 
 def executions(
     levels,
