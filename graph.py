@@ -41,13 +41,14 @@ def generate_benchmark_graphs(dir_results, path_csv_benchmark, mechanisms_dict):
 def generate_simulator_graphs(dir_results, path_csv_simulator, mechanisms_dict, simulator_was_run=False):
 
     # Generate graphs for simulator results
+    simulator_dir = dir_results / "simulator"
     # path_csv_simulator = simulator_dir / "blocksim-mean-std.csv"
     path_csv = Path(path_csv_simulator)
     if path_csv.exists():
         print("\nGenerating simulator results graphs...")
         generate_graphs(
             path_csv=str(path_csv),
-            dir_results=str(dir_results),
+            dir_results=str(simulator_dir),
             mechanisms_dict=mechanisms_dict,
             columns=[
                 ("mean_verify", "std_verify", "Verification"),
