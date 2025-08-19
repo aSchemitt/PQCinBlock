@@ -5,7 +5,7 @@ import psutil
 import json
 import subprocess
 from datetime import datetime
-
+import logging
 def measure_timer_resolution(samples=10_000):
     """Measure the effective resolution of time.perf_counter()."""
     min_diff = float('inf')
@@ -93,7 +93,9 @@ def export_metadata(args, format="json", filename=None):
     else:
         raise ValueError("Format must be 'json' or 'csv'")
     
-    print(f"\nMetadata exported to {filename}")
+    logging.info("")
+    logging.info(f"Metadata exported to:")
+    logging.info(f"\t\t{filename}")
     return filename
 
 def print_config(args):

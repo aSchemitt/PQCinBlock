@@ -1,6 +1,6 @@
 import numpy as np
 from pathlib import Path
-
+import logging
 from visualization.graph import generate_graphs
 
 def generate_benchmark_graphs(dir_results, path_csv_benchmark, mechanisms_dict):
@@ -19,7 +19,9 @@ def generate_benchmark_graphs(dir_results, path_csv_benchmark, mechanisms_dict):
     # Generate graphs for algorithm performance
     path_csv_sign = algorithm_runs_dir / "time-evaluation-mean-std.csv"
     if path_csv_sign.exists():
-        print("\nGenerating algorithm performance graphs...")
+        logging.info("")
+        logging.info("Generating benchmark plots:")
+        
         generate_graphs(
             path_csv=str(path_csv_sign),
             dir_results=str(algorithm_runs_dir),
@@ -35,8 +37,8 @@ def generate_benchmark_graphs(dir_results, path_csv_benchmark, mechanisms_dict):
             log_xlim=(1e-3, 1e4),
         )
     else:
-        print(f"\nWarning: Algorithm CSV file not found, skipping algorithm graphs: {path_csv_sign}")
-
+        logging.warning(f"Warning: Algorithm CSV file not found, skipping algorithm graphs: {path_csv_sign}")
+    logging.info("")
 
 def generate_simulator_graphs(dir_results, path_csv_simulator, mechanisms_dict, simulator_was_run=False):
 
@@ -44,7 +46,9 @@ def generate_simulator_graphs(dir_results, path_csv_simulator, mechanisms_dict, 
     # path_csv_simulator = simulator_dir / "blocksim-mean-std.csv"
     path_csv = Path(path_csv_simulator)
     if path_csv.exists():
-        print("\nGenerating simulator results graphs...")
+        logging.info("")
+        logging.info("Generating simulator plots:")
+        
         generate_graphs(
             path_csv=str(path_csv),
             dir_results=str(dir_results),
@@ -59,6 +63,6 @@ def generate_simulator_graphs(dir_results, path_csv_simulator, mechanisms_dict, 
         )
     else:
         if simulator_was_run:
-            print(f"\nWarning: Simulator output CSV not found, skipping simulator graphs: {path_csv}")
+            logging.warning(f"Warning: Simulator output CSV not found, skipping simulator graphs: {path_csv}")
         else:
-            print("\nSimulator not executed, skipping simulator graphs.")
+            logging.info("Simulator not executed, skipping simulator graphs.")

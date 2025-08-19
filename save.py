@@ -1,6 +1,6 @@
 from pathlib import Path
 from datetime import datetime
-
+import logging
 DIR_RESULTS = "results"
 DIR_ALGORITHMS_RUNS = "algorithm-runs"
 DIR_GRAPH = "graph"
@@ -59,6 +59,6 @@ def save_results_algorithm_runs(dfs, algorithms_dict, levels):
     for key, df in dfs.items():
         file = algorithms_runs_directory / f"{key}.csv"
         _save_csv(df, file)
-        print(f"{file}")
+        logging.info(f"\t\t{file}")
     
     return results_directory, algorithms_runs_directory

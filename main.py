@@ -111,7 +111,9 @@ def _run_benchmark(args, filtered_algorithms):
     """Handles the logic when the script is run with --sign arguments."""
 
     logging.info(Fore.BLUE)
-    logging.info("\nBenchmark run...\n")
+    logging.info("+-----------------+") 
+    logging.info("  BENCHMARK       ")
+    logging.info("+-----------------+") 
 
     evaluations_functions = utils.load_functions(ALGORITHMS_DIR)
 
@@ -138,8 +140,11 @@ def _run_simulator(args, filtered_algorithms, dir_results, path_csv):
     logging.info(Fore.GREEN)
 
     simulator_was_run = args.runs_simulator > 0
-    if simulator_was_run:        
-        print("\nBlockSim run...")
+    if simulator_was_run:       
+        logging.info("+-----------------+") 
+        logging.info("  SIMULATION      ")
+        logging.info("+-----------------+") 
+
         for model in args.model:                    
             path_csv_simulator = simulator(
                 dir_results=dir_results,

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import seaborn as sns
 import pandas as pd
-
+import logging
 # Internal import 
 from visualization import utils
 
@@ -122,7 +122,7 @@ def plot_horizontal(
     for ext in save_formats:
         file = f"{graphics_directory}/{filename}.{ext}"
         plt.savefig(file, format=ext)
-        print(file)
+        logging.info(f"\t{file}")
 
     if show_graph:
         plt.show()
@@ -148,7 +148,7 @@ def generate_plots_from_csv(
     xlabel="Average time (ms)",
     ylabel="Algorithms",
     figsize=(16, 9),
-    save_formats=("pdf", "png"),
+    save_formats=("pdf"),
 ):
     """
     Generates bar plots with error bars from a benchmark CSV file.
@@ -202,7 +202,7 @@ def generate_plots_from_csv(
                     break
             if not has_positive_data:
                 effective_xscale = "linear"
-                print(f"\nWarning: No positive data for level {level} to plot with log scale. Switching to linear scale.")
+                logging.warning(f"\nWarning: No positive data for level {level} to plot with log scale. Switching to linear scale.")
         
         plot_horizontal(
             df_all=df_subset, 
