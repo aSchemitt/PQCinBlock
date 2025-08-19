@@ -148,7 +148,7 @@ def generate_plots_from_csv(
     xlabel="Average time (ms)",
     ylabel="Algorithms",
     figsize=(16, 9),
-    save_formats=("svg", "png"),
+    save_formats=("pdf", "png"),
 ):
     """
     Generates bar plots with error bars from a benchmark CSV file.
@@ -170,8 +170,8 @@ def generate_plots_from_csv(
         xlabel (str, optional): Label for the X-axis. Defaults to "Algoritmos".
         yscale (str, optional): Scale for the Y-axis, either "log" or "linear". Defaults to "log".
         figsize (tuple, optional): Size of the figure in inches. Defaults to (16, 9).
-        save_formats (tuple, optional): File formats to save the plots (e.g., ("svg", "png")). 
-            Defaults to ("svg", "png").
+        save_formats (tuple, optional): File formats to save the plots (e.g., ("pdf", "png")). 
+            Defaults to ("pdf", "png").
 
     Returns:
         None
@@ -224,5 +224,5 @@ def generate_plots_from_csv(
             show_values=show_values,
             show_errors=show_erros,
             show_legend=show_legend,
-            save_formats=("svg", "png")
+            save_formats=save_formats
         )
