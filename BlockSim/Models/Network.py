@@ -1,12 +1,13 @@
 import random
-from BlockSim.InputsConfig import InputsConfig as p
 
 class Network:
     
     # Delay for propagating blocks in the network
     def block_prop_delay():
-    	return random.expovariate(1/p.Bdelay)
+        from BlockSim.InputsConfig import InputsConfig as p
+        return random.expovariate(1/p.Bdelay)
 
     # Delay for propagating transactions in the network
     def tx_prop_delay():
-    	return random.expovariate(1/p.Tdelay)
+        from BlockSim.InputsConfig import InputsConfig as p
+        return random.expovariate(1/p.Tdelay)

@@ -19,7 +19,9 @@ python main.py --sign \
     cross-rsdpg-balanced \
     cross-rsdp-fast \
     cross-rsdpg-fast \
+    --runs 10000 \
+    --warm-up 1000 \
     --levels 1 2 3 5 \
-    --input-file \
+    --model 1 2 \
     --runs-simulator 1000
 

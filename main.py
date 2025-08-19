@@ -1,13 +1,14 @@
 import argparse
 import pandas as pd
 from pathlib import Path
-import os
 
 # Internal imports
 import sign_python as sign
 import utils
 import save
 import info
+import graph
+from simulator import simulator
 
 # Constants
 VARIANT_COLUMN = 'variant'
@@ -20,15 +21,17 @@ def _get_combined_mechanisms(filtered_algorithms):
         combined_mechanisms.update(algorithm)
     return combined_mechanisms
 
-def _run_simulator_from_input_file(args, filtered_algorithms, parser):
-    """Handles the logic when the script is run with an input file."""
-    from simulator import simulator
-    import graph
+def _export_input_and_system_info(args, dir_results):
+    info.export_metadata(
+        args,
+        format="json",
+        filename=Path(dir_results) / "input-and-system-info.json"
+    )
+
+def _run_simulator_only(args, filtered_algorithms, parser):
 
     if not args.runs_simulator:
         parser.error("--runs-simulator must be provided with --input-file.")
-
-    print("\nBlockSim run from input file...")
 
     try:
         input_path = Path(args.input_file)
@@ -75,31 +78,20 @@ def _run_simulator_from_input_file(args, filtered_algorithms, parser):
         levels=sorted(list(levels_present))
     )
 
-    info.export_metadata(args, format="json", filename=Path(dir_results) / "metadata.json")
+    _export_input_and_system_info(args, dir_results)
 
     dir_results_path = Path(dir_results)
     filtered_csv_path = dir_results_path / "filtered-input.csv"
     df_filtered.to_csv(filtered_csv_path, index=False)
     print(f"Filtered data saved to: {filtered_csv_path}")
 
-    simulator(
-        dir_results=dir_results,
-        input_file=str(filtered_csv_path),
-        runs=args.runs_simulator,
-        variants_by_module=filtered_algorithms,
-    )
+    _run_simulator(args, filtered_algorithms, dir_results, path_csv=filtered_csv_path)
 
-    graph.generate_all_graphs(
-        dir_results=dir_results,
-        mechanisms_dict=_get_combined_mechanisms(filtered_algorithms),
-        simulator_was_run=True
-    )
 
-def _run_from_sign_algorithms_and_simulator(args, filtered_algorithms):
+def _run_benchmark(args, filtered_algorithms):
     """Handles the logic when the script is run with --sign arguments."""
-    import graph
 
-    print("\nBenchmark run...")
+    print("\nBenchmark run...\n")
 
     evaluations_functions = utils.load_functions(ALGORITHMS_DIR)
 
@@ -111,24 +103,42 @@ def _run_from_sign_algorithms_and_simulator(args, filtered_algorithms):
         warm_up=args.warm_up
     )
 
-    info.export_metadata(args, format="json", filename=Path(dir_results) / "metadata.json")
+    _export_input_and_system_info(args, dir_results)
+
+    graph.generate_benchmark_graphs(
+        dir_results=dir_results,
+        path_csv_benchmark=path_csv,
+        mechanisms_dict=_get_combined_mechanisms(filtered_algorithms),
+    )
+
+    return dir_results, path_csv
+
+def _run_simulator(args, filtered_algorithms, dir_results, path_csv):
 
     simulator_was_run = args.runs_simulator > 0
-    if simulator_was_run:
-        from simulator import simulator
+    if simulator_was_run:        
         print("\nBlockSim run...")
-        simulator(
+        for model in args.model:                    
+            path_csv_simulator = simulator(
+                dir_results=dir_results,
+                model=model,
+                input_file=path_csv,
+                runs=args.runs_simulator,
+                variants_by_module=filtered_algorithms,
+            )
+
+        graph.generate_simulator_graphs (
             dir_results=dir_results,
-            input_file=path_csv,
-            runs=args.runs_simulator,
-            variants_by_module=filtered_algorithms,
+            path_csv_simulator=path_csv_simulator,
+            mechanisms_dict=_get_combined_mechanisms(filtered_algorithms),
+            simulator_was_run=simulator_was_run
         )
-    
-    graph.generate_all_graphs(
-        dir_results=dir_results,
-        mechanisms_dict=_get_combined_mechanisms(filtered_algorithms),
-        simulator_was_run=simulator_was_run
-    )
+
+
+def _run_benchmark_and_simulator(args, filtered_algorithms):
+    dir_results, path_csv = _run_benchmark(args, filtered_algorithms)
+    _run_simulator(args, filtered_algorithms, dir_results, path_csv)
+
 
 def main():
     """Main function to parse arguments and dispatch tasks."""
@@ -141,28 +151,25 @@ def main():
     valid_signs = list(utils.extract_algorithms(all_algorithms))
     valid_levels = list(range(1, 6))
     
-    parser.add_argument("--model", type=int, default=2, choices=[0, 1, 2, 3], help="BlockSim model to use (0: Base, 1: Bitcoin, 2: Ethereum, 3: AppendableBlock)")
-    parser.add_argument("--sign", help="Input list of digital signature algorithms (space-separated)", type=str, nargs="+", choices=valid_signs)
+    parser.add_argument("--model", "-m", type=int, nargs="+", default=[2], choices=[1, 2], help="BlockSim model to use (1: Bitcoin, 2: Ethereum)")
+    parser.add_argument("--sign", "-s", help="Input list of digital signature algorithms (space-separated)", type=str, nargs="+", choices=valid_signs)
     parser.add_argument("--levels", "-l", help="Nist levels (space-separated)", type=int, nargs="+", default=valid_levels, choices=valid_levels)
     parser.add_argument("--runs", "-r", help="Number of executions", type=utils.positive_int, default=1)
     parser.add_argument("--warm-up", "-wp", help="Number of executions warm up", type=utils.non_negative_int, default=0)
     parser.add_argument("--list-sign", help="List of variants digital signature algorithms", action="store_true")
     parser.add_argument("--runs-simulator", help="Number of simulator runs", type=utils.non_negative_int, default=0)
-    parser.add_argument("--input-file", help="Input CSV file for the simulator to run independently.", type=str)
+    parser.add_argument("--input-file", "-i", help="Input CSV file for the simulator to run independently of benchmark.", type=str)
     
     args = parser.parse_args()
 
-    # Set environment variable for BlockSim model before importing the simulator
-    os.environ['BLOCKSIM_MODEL'] = str(args.model)
-    
     filtered_algorithms = utils.filter_algorithms(all_algorithms, args.sign, args.levels)
 
-    if args.input_file:
-        _run_simulator_from_input_file(args, filtered_algorithms, parser)
+    if args.list_sign:
+        sign.print_by_variants(filtered_algorithms)        
+    elif args.input_file:
+        _run_simulator_only(args, filtered_algorithms, parser)
     elif args.sign:
-        _run_from_sign_algorithms_and_simulator(args, filtered_algorithms)
-    elif args.list_sign:
-        sign.print_by_variants(filtered_algorithms)
+        _run_benchmark_and_simulator(args, filtered_algorithms)
     else:
         parser.print_help()
 

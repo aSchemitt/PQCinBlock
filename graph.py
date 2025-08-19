@@ -3,7 +3,7 @@ from pathlib import Path
 
 from visualization.graph import generate_graphs
 
-def generate_all_graphs(dir_results, mechanisms_dict, simulator_was_run=False):
+def generate_benchmark_graphs(dir_results, path_csv_benchmark, mechanisms_dict):
     """
     Generates all graphs for the experiment, including algorithm performance
     and simulator results.
@@ -11,7 +11,6 @@ def generate_all_graphs(dir_results, mechanisms_dict, simulator_was_run=False):
     Args:
         dir_results (str or Path): The main results directory.
         mechanisms_dict (dict): A dictionary of the mechanisms used.
-        simulator_was_run (bool): Flag indicating if the simulator was executed.
     """
     dir_results = Path(dir_results)
     algorithm_runs_dir = dir_results / "algorithm-runs"
@@ -38,13 +37,17 @@ def generate_all_graphs(dir_results, mechanisms_dict, simulator_was_run=False):
     else:
         print(f"\nWarning: Algorithm CSV file not found, skipping algorithm graphs: {path_csv_sign}")
 
+
+def generate_simulator_graphs(dir_results, path_csv_simulator, mechanisms_dict, simulator_was_run=False):
+
     # Generate graphs for simulator results
-    path_csv_simulator = simulator_dir / "blocksim-mean-std.csv"
-    if path_csv_simulator.exists():
+    # path_csv_simulator = simulator_dir / "blocksim-mean-std.csv"
+    path_csv = Path(path_csv_simulator)
+    if path_csv.exists():
         print("\nGenerating simulator results graphs...")
         generate_graphs(
-            path_csv=str(path_csv_simulator),
-            dir_results=str(simulator_dir),
+            path_csv=str(path_csv),
+            dir_results=str(dir_results),
             mechanisms_dict=mechanisms_dict,
             columns=[
                 ("mean_verify", "std_verify", "Verification"),
@@ -56,6 +59,6 @@ def generate_all_graphs(dir_results, mechanisms_dict, simulator_was_run=False):
         )
     else:
         if simulator_was_run:
-            print(f"\nWarning: Simulator output CSV not found, skipping simulator graphs: {path_csv_simulator}")
+            print(f"\nWarning: Simulator output CSV not found, skipping simulator graphs: {path_csv}")
         else:
             print("\nSimulator not executed, skipping simulator graphs.")

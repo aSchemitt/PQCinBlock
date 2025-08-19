@@ -1,4 +1,6 @@
 
+import os
+
 class InputsConfig:
 
     """ Seclect the model to be simulated.
@@ -7,7 +9,7 @@ class InputsConfig:
     2 : Ethereum model
         3 : AppendableBlock model
     """
-    model = 2
+    model = int(os.environ.get('BLOCKSIM_MODEL', 2))
 
     ''' Input configurations for the base model '''
     if model == 0:
@@ -66,6 +68,11 @@ class InputsConfig:
         ''' Simulation Parameters '''
         simTime = 10000  # the simulation length (in seconds)
         Runs = 2  # Number of simulation runs
+
+        """ Other Parameters """
+        variant = ""
+        mean_verify = 0.0
+        std_verify = 0.0
 
     ''' Input configurations for Ethereum model '''
     if model == 2:

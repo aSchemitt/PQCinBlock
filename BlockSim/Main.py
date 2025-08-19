@@ -27,7 +27,7 @@ elif p.model == 2:
 elif p.model == 1:
     from BlockSim.Models.Bitcoin.BlockCommit import BlockCommit
     from BlockSim.Models.Bitcoin.Consensus import Consensus
-    from BlockSim.Models.Transaction import LightTransaction as LT, FullTransaction as FT
+    from BlockSim.Models.Bitcoin.Transaction import LightTransaction as LT, FullTransaction as FT
     from BlockSim.Models.Bitcoin.Node import Node
     from BlockSim.Models.Incentives import Incentives
 

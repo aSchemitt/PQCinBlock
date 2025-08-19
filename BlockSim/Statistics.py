@@ -63,15 +63,18 @@ class Statistics:
 
     ########################################################### prepare the global chain  ###########################################################################################
     def global_chain():
-        if p.model==0 or p.model==1:
-                for i in c.global_chain:
-                        block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size]
-                        Statistics.chain +=[block]
-        elif p.model==2:
-                for i in c.global_chain:
-                        block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.usedgas, len(i.uncles), i.transactions_verification_time]
-                        Statistics.chain +=[block]
-                        Statistics.blocks_verification_times.append(i.transactions_verification_time)
+        for i in c.global_chain:
+            if p.model == 0:
+                block = [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size]
+                Statistics.chain += [block]
+            elif p.model == 1:
+                block = [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size, i.transactions_verification_time]
+                Statistics.chain += [block]
+                Statistics.blocks_verification_times.append(i.transactions_verification_time)
+            elif p.model == 2:
+                block = [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.usedgas, len(i.uncles), i.transactions_verification_time]
+                Statistics.chain += [block]
+                Statistics.blocks_verification_times.append(i.transactions_verification_time)
 
     ########################################################### Print simulation results to Excel ###########################################################################################
     def print_to_excel(fname):
@@ -87,8 +90,12 @@ class Statistics:
 
         df4 = pd.DataFrame(Statistics.chain)
         #df4.columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions','Block Size']
-        if p.model==2: df4.columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions','Block Limit', 'Uncle Blocks', 'Transactions Verification Time (ms)']
-        else: df4.columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions', 'Block Size']
+        if p.model == 1:
+            df4.columns = ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions', 'Block Size', 'Transactions Verification Time (ms)']
+        elif p.model == 2:
+            df4.columns = ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions', 'Block Limit', 'Uncle Blocks', 'Transactions Verification Time (ms)']
+        else:
+            df4.columns = ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions', 'Block Size']
 
         writer = pd.ExcelWriter(fname, engine='xlsxwriter')
         df1.to_excel(writer, sheet_name='InputConfig')
