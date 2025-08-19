@@ -75,7 +75,7 @@ def _run_simulator_from_input_file(args, filtered_algorithms, parser):
         levels=sorted(list(levels_present))
     )
 
-    info.export_metadata(format="json", filename=Path(dir_results) / "metadata.json")
+    info.export_metadata(args, format="json", filename=Path(dir_results) / "metadata.json")
 
     dir_results_path = Path(dir_results)
     filtered_csv_path = dir_results_path / "filtered-input.csv"
@@ -111,7 +111,7 @@ def _run_from_sign_algorithms_and_simulator(args, filtered_algorithms):
         warm_up=args.warm_up
     )
 
-    info.export_metadata(format="json", filename=Path(dir_results) / "metadata.json")
+    info.export_metadata(args, format="json", filename=Path(dir_results) / "metadata.json")
 
     simulator_was_run = args.runs_simulator > 0
     if simulator_was_run:

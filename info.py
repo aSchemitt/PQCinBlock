@@ -17,17 +17,6 @@ def measure_timer_resolution(samples=10_000):
             min_diff = min(min_diff, diff)
     return min_diff
 
-# def get_gpu_info():
-#     """Attempt to get GPU info (if NVIDIA/CUDA is available)."""
-#     try:
-#         result = subprocess.run(["nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader"], 
-#                                capture_output=True, text=True)
-#         if result.returncode == 0:
-#             return result.stdout.strip()
-#     except FileNotFoundError:
-#         pass
-#     return "Not available"
-
 def collect_system_metadata():
     """Collect all relevant hardware/software metadata."""
     # Timer precision
@@ -61,7 +50,6 @@ def collect_system_metadata():
         "memory": {
             "total_gb": round(psutil.virtual_memory().total / (1024**3), 2),
         },
-        # "gpu": get_gpu_info(),
         "timer": {
             "perf_counter_resolution_ns": timer_resolution_ns,
             "perf_counter_units": "seconds (float)",
@@ -69,7 +57,7 @@ def collect_system_metadata():
         },
         "environment": {
             "cpu_governor": get_cpu_governor() if platform.system() == "Linux" else "N/A",
-            "cpu_affinity": list(psutil.Process().cpu_affinity()),
+            "cpu_affinity": list(psutil.Process().cpu_affinity()) if platform.system() == "Linux" else "N/A",
         }
     }
     
@@ -83,9 +71,13 @@ def get_cpu_governor():
     except FileNotFoundError:
         return "Unknown"
 
-def export_metadata(format="json", filename=None):
+def export_metadata(args, format="json", filename=None):
     """Export metadata to file."""
-    data = collect_system_metadata()
+    
+    data = {
+        "config": print_config(args),
+        "system_metadata": collect_system_metadata(),
+    }
     
     if not filename:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -101,13 +93,12 @@ def export_metadata(format="json", filename=None):
     else:
         raise ValueError("Format must be 'json' or 'csv'")
     
-    print(f"Metadata exported to {filename}")
+    print(f"\nMetadata exported to {filename}")
     return filename
 
-# # Example usage
-# if __name__ == "__main__":
-#     # Print to console
-#     print(json.dumps(collect_system_metadata(), indent=2))
-    
-#     # Export to file (JSON by default)
-#     export_metadata()
+def print_config(args):
+    """Return args configuration as dict instead of just logging."""
+    config = {}
+    for k, v in sorted(vars(args).items()):
+        config[k] = v
+    return config
