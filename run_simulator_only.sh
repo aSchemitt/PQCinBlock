@@ -8,10 +8,6 @@ fi
 
 CSV_FILE="$1"
 
-# Activate the virtual environment
-source venv/bin/activate
-
-
 python main.py --sign \
     ecdsa \
     mldsa \
