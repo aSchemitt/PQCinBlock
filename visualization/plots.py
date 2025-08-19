@@ -148,7 +148,7 @@ def generate_plots_from_csv(
     xlabel="Average time (ms)",
     ylabel="Algorithms",
     figsize=(16, 9),
-    save_formats=("pdf"),
+    save_formats=["pdf"],
 ):
     """
     Generates bar plots with error bars from a benchmark CSV file.
