@@ -24,7 +24,7 @@ echo "Cloning and building liboqs..."
 # git clone --depth=1 --branch ${LIBOQS_TAG} https://github.com/open-quantum-safe/liboqs
 git clone https://github.com/open-quantum-safe/liboqs
 cd liboqs
-git checkout tags/${LIBOQS_TAG}
+git checkout "tags/${LIBOQS_TAG}" -b "liboqs-${LIBOQS_TAG}"
 
 # Sets the source and build directories 
 # -DBUILD_SHARED_LIBS=ON
@@ -68,7 +68,7 @@ echo "Cloning and installing liboqs-python..."
 # git clone --depth=1 --branch ${LIBOQS_PYTHON_TAG} https://github.com/open-quantum-safe/liboqs-python
 git clone https://github.com/open-quantum-safe/liboqs-python
 cd liboqs-python
-git checkout tags/${LIBOQS_PYTHON_TAG}
+git checkout "tags/${LIBOQS_PYTHON_TAG}" -b "liboqs-${LIBOQS_PYTHON_TAG}"
 pip install .
 
 cd ..
