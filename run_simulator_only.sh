@@ -28,4 +28,4 @@ python main.py --sign \
     --levels 1 2 3 5 \
     --input-file "$CSV_FILE" \
     --model 1 2 \
-    --runs-simulator 2
+    --runs-simulator 1000
