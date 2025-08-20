@@ -1,4 +1,4 @@
-from BlockSim.InputsConfig import InputsConfig as p
+from BlockSim.InputsConfig import InputsConfig as p, set_model
 from BlockSim.Event import Event, Queue
 from BlockSim.Scheduler import Scheduler
 from BlockSim.Statistics import Statistics
@@ -42,8 +42,9 @@ elif p.model == 0:
 ########################################################## Start Simulation ##############################################################
 
 
-def blocksim(input_file, output_file, runs):
+def blocksim(input_file, output_file, runs, model):
     try:         
+        set_model(model)
         df = pd.read_csv(input_file, index_col=False)
         for index, line in df.iterrows():
             p.variant = line["variant"]

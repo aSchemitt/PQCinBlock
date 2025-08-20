@@ -8,8 +8,8 @@ import save
 import utils
 import logging
 import sys 
-
 from BlockSim.Main import blocksim
+
 MODELS={}
 MODELS[1]="Bitcoin"
 MODELS[2]="Ethereum"
@@ -22,13 +22,10 @@ def simulator(results_dir, model, input_file, runs, variants_by_module):
 
     output_blocksim = simulator_directory / f"blocksim-model-{model}-{runs}x.csv"
 
-    # Set environment variable for BlockSim model before importing the simulator
-    os.environ['BLOCKSIM_MODEL'] = str(model)
-
     logging.info("")
     logging.info(f"BlockSim run model {model} ({MODELS[model]})")
     
-    blocksim(input_file=input_file, output_file=str(output_blocksim), runs=runs)
+    blocksim(input_file=input_file, output_file=str(output_blocksim), runs=runs, model=model)
     
     try:
         df = pd.read_csv(output_blocksim)
