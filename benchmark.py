@@ -112,4 +112,4 @@ def benchmark(
     logging.info(f"\t{path_csv_runs}")
     logging.info(f"\t{path_csv_mean_std}")
 
-    return path_csv_runs
+    return path_csv_mean_std

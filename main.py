@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 # Internal imports
-import sign_python as sign
+import benchmark as sign
 import utils
 import save
 import info
@@ -164,12 +164,6 @@ def _run_simulator(args, filtered_algorithms, dir_results, path_csv):
             simulator_was_run=simulator_was_run
         )
 
-
-def _run_benchmark_and_simulator(args, filtered_algorithms):
-    dir_results, path_csv = _run_benchmark(args, filtered_algorithms)
-    _run_simulator(args, filtered_algorithms, dir_results, path_csv)
-
-
 def main():
     """Main function to parse arguments and dispatch tasks."""
     parser = argparse.ArgumentParser(
@@ -226,7 +220,8 @@ def main():
         else:
             _run_simulator_only(args, filtered_algorithms, parser)
     elif args.sign:
-        _run_benchmark_and_simulator(args, filtered_algorithms)
+        dir_results, path_csv = _run_benchmark(args, filtered_algorithms)
+        _run_simulator(args, filtered_algorithms, dir_results, path_csv)
     else:
         parser.print_help()
 
