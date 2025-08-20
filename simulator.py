@@ -19,7 +19,7 @@ def simulator(dir_results, model, input_file, runs, variants_by_module):
         root_directory=dir_results
     )
 
-    output_blocksim = simulator_directory / f"blocksim-model-{model}-{runs}x.csv"
+    output_blocksim = simulator_directory / f"blocksim-model-{MODELS[model].lower()}-{runs}x.csv"
 
     # Set environment variable for BlockSim model before importing the simulator
     os.environ['BLOCKSIM_MODEL'] = str(model)

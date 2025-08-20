@@ -115,12 +115,15 @@ def _run_benchmark(args, filtered_algorithms):
     logging.info("  BENCHMARK       ")
     logging.info("+-----------------+") 
 
-    evaluations_functions = utils.load_functions(ALGORITHMS_DIR)
+    evaluation_function = utils.load_functions(ALGORITHMS_DIR)
 
-    dir_results, path_csv = sign.executions(
+    dir_results = save.create_results_directory(algorithms_dict=filtered_algorithms, levels=args.levels)
+
+    path_csv_benchmark = sign.benchmark(
+        dir_results=dir_results,
         levels=args.levels,
         variants_by_module=filtered_algorithms,
-        evaluations_functions=evaluations_functions,
+        evaluation_function=evaluation_function,
         runs=args.runs,
         warm_up=args.warm_up
     )
@@ -129,11 +132,11 @@ def _run_benchmark(args, filtered_algorithms):
 
     graph.generate_benchmark_graphs(
         dir_results=dir_results,
-        path_csv_benchmark=path_csv,
+        path_csv_benchmark=path_csv_benchmark,
         mechanisms_dict=_get_combined_mechanisms(filtered_algorithms),
     )
 
-    return dir_results, path_csv
+    return dir_results, path_csv_benchmark
 
 def _run_simulator(args, filtered_algorithms, dir_results, path_csv):
 

@@ -4,7 +4,6 @@ from cryptography.exceptions import InvalidSignature
 from time import perf_counter
 import random
 import string
-import pandas as pd
 
 ALGORITHMS = {
     'ecdsa': {
@@ -26,9 +25,8 @@ def time_evaluation(variant: str, runs: int):
         raise ValueError(f"Unknown variant {variant}. Available: {list(curves.keys())}")
 
     curve = curves[variant]
+    results = []
 
-    time_keypair, time_sign, time_verify = [], [], []
-    
     # Runs
     for i in range(runs):
 
@@ -39,7 +37,7 @@ def time_evaluation(variant: str, runs: int):
         pk = sk.public_key()
         end_keypair = perf_counter()
 
-        time_keypair.append((end_keypair - start_keypair) * 1000)
+        keypair_time = (end_keypair - start_keypair) * 1000
 
         start_sign=perf_counter()
         signature = sk.sign(
@@ -48,7 +46,7 @@ def time_evaluation(variant: str, runs: int):
         )
         end_sign=perf_counter()
     
-        time_sign.append((end_sign - start_sign) * 1000)
+        sign_time = (end_sign - start_sign) * 1000
 
         try:
             start_verify=perf_counter()
@@ -61,11 +59,13 @@ def time_evaluation(variant: str, runs: int):
         except InvalidSignature:
             print(f"WARNING: Verification failed at iteration {i}!")
         
-        time_verify.append((end_verify - start_verify) * 1000)
+        verify_time = (end_verify - start_verify) * 1000
 
-    return pd.DataFrame({
-        'variant': [variant] * runs,
-        'keypair': time_keypair,
-        'sign': time_sign,
-        'verify': time_verify
-    })
+        results.append({
+            "variant": variant,
+            "keypair": keypair_time,
+            "sign": sign_time,
+            "verify": verify_time
+        })
+
+    return results
