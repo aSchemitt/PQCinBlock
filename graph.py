@@ -5,17 +5,17 @@ import logging
 import save
 from visualization.graph import generate_graphs
 
-def generate_benchmark_graphs(dir_results, path_csv_benchmark, mechanisms_dict):
+def generate_benchmark_graphs(results_dir, path_csv_benchmark, mechanisms_dict):
     """
     Generates all graphs for the experiment, including algorithm performance
     and simulator results.
 
     Args:
-        dir_results (str or Path): The main results directory.
+        results_dir (str or Path): The main results directory.
         mechanisms_dict (dict): A dictionary of the mechanisms used.
     """
-    dir_results = Path(dir_results)
-    dir_benchmark = dir_results / save.DIR_BENCHMARK
+    results_dir = Path(results_dir)
+    dir_benchmark = results_dir / save.DIR_BENCHMARK
 
     # Generate graphs for algorithm performance
     path_csv_sign = dir_benchmark / "time-evaluation-mean-std.csv"
@@ -25,7 +25,7 @@ def generate_benchmark_graphs(dir_results, path_csv_benchmark, mechanisms_dict):
         
         generate_graphs(
             path_csv=str(path_csv_sign),
-            dir_results=str(dir_benchmark),
+            results_dir=str(dir_benchmark),
             mechanisms_dict=mechanisms_dict,
             columns=[
                 ("mean_sign", "std_sign", "Signature"),
@@ -41,10 +41,10 @@ def generate_benchmark_graphs(dir_results, path_csv_benchmark, mechanisms_dict):
         logging.warning(f"Warning: Algorithm CSV file not found, skipping algorithm graphs: {path_csv_sign}")
     logging.info("")
 
-def generate_simulator_graphs(dir_results, path_csv_simulator, mechanisms_dict, simulator_was_run=False):
+def generate_simulator_graphs(results_dir, path_csv_simulator, mechanisms_dict, simulator_was_run=False):
 
     # Generate graphs for simulator results
-    dir_simulator = dir_results / save.DIR_SIMULATOR
+    dir_simulator = results_dir / save.DIR_SIMULATOR
     # path_csv_simulator = dir_simulator / "blocksim-mean-std.csv"
     path_csv = Path(path_csv_simulator)
     if path_csv.exists():
@@ -53,7 +53,7 @@ def generate_simulator_graphs(dir_results, path_csv_simulator, mechanisms_dict, 
         
         generate_graphs(
             path_csv=str(path_csv),
-            dir_results=str(dir_simulator),
+            results_dir=str(dir_simulator),
             mechanisms_dict=mechanisms_dict,
             columns=[
                 ("mean_verify", "std_verify", "Verification"),

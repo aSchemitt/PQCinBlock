@@ -14,10 +14,10 @@ MODELS={}
 MODELS[1]="Bitcoin"
 MODELS[2]="Ethereum"
 
-def simulator(dir_results, model, input_file, runs, variants_by_module):
+def simulator(results_dir, model, input_file, runs, variants_by_module):
 
     simulator_directory = save.create_simulator_directory(
-        root_directory=dir_results
+        root_directory=results_dir
     )
 
     output_blocksim = simulator_directory / f"blocksim-model-{model}-{runs}x.csv"
@@ -27,7 +27,7 @@ def simulator(dir_results, model, input_file, runs, variants_by_module):
 
     logging.info("")
     logging.info(f"BlockSim run model {model} ({MODELS[model]})")
-
+    
     blocksim(input_file=input_file, output_file=str(output_blocksim), runs=runs)
     
     try:

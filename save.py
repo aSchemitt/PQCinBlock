@@ -16,9 +16,7 @@ def _create_directory(root_directory, directory_name=None):
         Path(root_directory).mkdir(parents=True, exist_ok=True)
         return Path(root_directory)
 
-def create_results_directory(algorithms_dict, levels):
-
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+def _mount_results_directory(timestamp, algorithms_dict, levels):
 
     mechanisms = set()
     for module_mechanisms in algorithms_dict.values():
@@ -31,6 +29,10 @@ def create_results_directory(algorithms_dict, levels):
     
     path = Path(DIR_RESULTS) / base_dir
 
+    return path
+
+def create_results_directory(timestamp, algorithms_dict, levels):
+    path = _mount_results_directory(timestamp, algorithms_dict, levels)
     return _create_directory(path)
 
 def create_benchmark_directory(root_directory):

@@ -86,7 +86,7 @@ def _run_selected_variants(file_runs, file_mean_std, variants_by_module, functio
 
 
 def benchmark(
-    dir_results,
+    results_dir,
     levels,
     variants_by_module,
     evaluation_function,
@@ -94,7 +94,7 @@ def benchmark(
     warm_up
 ):
 
-    dir_benchmark = save.create_benchmark_directory(dir_results)
+    dir_benchmark = save.create_benchmark_directory(results_dir)
     path_csv_runs = dir_benchmark / f"time-evaluation-{runs}x.csv"
     path_csv_mean_std = dir_benchmark / f"time-evaluation-mean-std.csv"
 
