@@ -95,7 +95,7 @@ def export_metadata(args, format="json", filename=None):
     
     logging.info("")
     logging.info(f"Metadata exported to:")
-    logging.info(f"\t\t{filename}")
+    logging.info(f"\t{filename}")
     return filename
 
 def print_config(args):

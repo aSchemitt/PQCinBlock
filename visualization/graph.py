@@ -7,7 +7,7 @@ import save
 
 def generate_graphs(
     path_csv,
-    dir_results,
+    results_dir,
     columns,
     mechanisms_dict,
     values_offset,
@@ -26,7 +26,7 @@ def generate_graphs(
         print(f"Error: {e}")
         return
 
-    graphics_directory = save.create_graphics_directory(dir_results)
+    graphics_directory = save.create_graphics_directory(results_dir)
     
     plots.generate_plots_from_csv(
         path_csv=path_csv,

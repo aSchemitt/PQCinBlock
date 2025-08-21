@@ -8,10 +8,6 @@ fi
 
 CSV_FILE="$1"
 
-# Activate the virtual environment
-source venv/bin/activate
-
-
 python main.py --sign \
     ecdsa \
     mldsa \
@@ -32,4 +28,4 @@ python main.py --sign \
     --levels 1 2 3 5 \
     --input-file "$CSV_FILE" \
     --model 1 2 \
-    --runs-simulator 2
+    --runs-simulator 1000

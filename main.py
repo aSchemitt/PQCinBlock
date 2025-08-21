@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 # Internal imports
-import sign_python as sign
+import benchmark as sign
 import utils
 import save
 import info
@@ -42,11 +42,11 @@ def _get_combined_mechanisms(filtered_algorithms):
         combined_mechanisms.update(algorithm)
     return combined_mechanisms
 
-def _export_input_and_system_info(args, dir_results):
+def _export_input_and_system_info(args, results_dir):
     info.export_metadata(
         args,
         format="json",
-        filename=Path(dir_results) / "input-and-system-info.json"
+        filename=Path(results_dir) / "input-and-system-info.json"
     )
 
 def _run_simulator_only(args, filtered_algorithms, parser):
@@ -92,22 +92,22 @@ def _run_simulator_only(args, filtered_algorithms, parser):
         for level in algo_variants.keys()
     }
 
-    dir_results = save.create_results_directory(
+    results_dir = save.create_results_directory(
         algorithms_dict=filtered_algorithms,
         levels=sorted(list(levels_present))
     )
 
-    _export_input_and_system_info(args, dir_results)
+    _export_input_and_system_info(args, results_dir)
 
-    dir_results_path = Path(dir_results)
+    dir_results_path = Path(results_dir)
     filtered_csv_path = dir_results_path / "filtered-input.csv"
     df_filtered.to_csv(filtered_csv_path, index=False)
     logging.info(f"Filtered data saved to: {filtered_csv_path}")
 
-    _run_simulator(args, filtered_algorithms, dir_results, path_csv=filtered_csv_path)
+    _run_simulator(args, filtered_algorithms, results_dir, path_csv=filtered_csv_path)
 
 
-def _run_benchmark(args, filtered_algorithms):
+def _run_benchmark(results_dir, args, filtered_algorithms):
     """Handles the logic when the script is run with --sign arguments."""
 
     logging.info(Fore.BLUE)
@@ -115,27 +115,28 @@ def _run_benchmark(args, filtered_algorithms):
     logging.info("  BENCHMARK       ")
     logging.info("+-----------------+") 
 
-    evaluations_functions = utils.load_functions(ALGORITHMS_DIR)
+    evaluation_function = utils.load_functions(ALGORITHMS_DIR)
 
-    dir_results, path_csv = sign.executions(
+    path_csv_benchmark = sign.benchmark(
+        results_dir=results_dir,
         levels=args.levels,
         variants_by_module=filtered_algorithms,
-        evaluations_functions=evaluations_functions,
+        evaluation_function=evaluation_function,
         runs=args.runs,
         warm_up=args.warm_up
     )
 
-    _export_input_and_system_info(args, dir_results)
+    _export_input_and_system_info(args, results_dir)
 
     graph.generate_benchmark_graphs(
-        dir_results=dir_results,
-        path_csv_benchmark=path_csv,
+        results_dir=results_dir,
+        path_csv_benchmark=path_csv_benchmark,
         mechanisms_dict=_get_combined_mechanisms(filtered_algorithms),
     )
 
-    return dir_results, path_csv
+    return path_csv_benchmark
 
-def _run_simulator(args, filtered_algorithms, dir_results, path_csv):
+def _run_simulator(args, filtered_algorithms, results_dir, path_csv):
 
     logging.info(Fore.GREEN)
 
@@ -147,7 +148,7 @@ def _run_simulator(args, filtered_algorithms, dir_results, path_csv):
 
         for model in args.model:                    
             path_csv_simulator = simulator(
-                dir_results=dir_results,
+                results_dir=results_dir,
                 model=model,
                 input_file=path_csv,
                 runs=args.runs_simulator,
@@ -155,17 +156,11 @@ def _run_simulator(args, filtered_algorithms, dir_results, path_csv):
             )
 
         graph.generate_simulator_graphs (
-            dir_results=dir_results,
+            results_dir=results_dir,
             path_csv_simulator=path_csv_simulator,
             mechanisms_dict=_get_combined_mechanisms(filtered_algorithms),
             simulator_was_run=simulator_was_run
         )
-
-
-def _run_benchmark_and_simulator(args, filtered_algorithms):
-    dir_results, path_csv = _run_benchmark(args, filtered_algorithms)
-    _run_simulator(args, filtered_algorithms, dir_results, path_csv)
-
 
 def main():
     """Main function to parse arguments and dispatch tasks."""
@@ -192,14 +187,15 @@ def main():
     args = parser.parse_args()
 
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    logging_filename = f'./log_{timestamp}.log'
+    filtered_algorithms = utils.filter_algorithms(all_algorithms, args.sign, args.levels)
+
+    results_dir = save.create_results_directory(timestamp, filtered_algorithms, args.levels)
+    logging_filename = Path(results_dir) / f'log_{timestamp}.log'
 
     logging_format = '%(asctime)s\t---\t%(message)s'
 
     if args.verbosity == logging.DEBUG:
-        logging_format = '%(asctime)s\t---\t%(levelname)s {%(module)s} [%(funcName)s] %(message)s'
-
-     
+        logging_format = '%(asctime)s\t---\t%(levelname)s {%(module)s} [%(funcName)s] %(message)s'     
 
     # formatter = logging.Formatter(logging_format, datefmt=TIME_FORMAT, level=args.verbosity)
     logging.basicConfig(format=logging_format, level=args.verbosity)
@@ -212,9 +208,6 @@ def main():
 
     _print_all_settings(args)
 
-
-    filtered_algorithms = utils.filter_algorithms(all_algorithms, args.sign, args.levels)
-
     if args.list_sign:
         sign.print_by_variants(filtered_algorithms)        
     elif args.input_file:
@@ -223,7 +216,8 @@ def main():
         else:
             _run_simulator_only(args, filtered_algorithms, parser)
     elif args.sign:
-        _run_benchmark_and_simulator(args, filtered_algorithms)
+        path_csv = _run_benchmark(results_dir, args, filtered_algorithms)
+        _run_simulator(args, filtered_algorithms, results_dir, path_csv)
     else:
         parser.print_help()
 

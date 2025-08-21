@@ -1,5 +1,4 @@
 from time import perf_counter
-import pandas as pd
 import random
 import string
 import oqs
@@ -82,7 +81,7 @@ ALGORITHMS = {
 
 def time_evaluation(variant: str, runs: int):
 
-    time_keypair, time_sign, time_verify = [], [], []
+    results = []
 
     # message = "This is the message to sign".encode()
 
@@ -98,7 +97,7 @@ def time_evaluation(variant: str, runs: int):
             signer_public_key = signer.generate_keypair()
             end_keypair = perf_counter()
 
-            time_keypair.append((end_keypair - start_keypair) * 1000)
+            keypair_time = (end_keypair - start_keypair) * 1000
 
             # Optionally, the secret key can be obtained by calling export_secret_key()
             # and the signer can later be re-instantiated with the key pair:
@@ -112,21 +111,23 @@ def time_evaluation(variant: str, runs: int):
             signature = signer.sign(message)
             end_sign = perf_counter()
 
-            time_sign.append((end_sign - start_sign) * 1000)
+            sign_time = (end_sign - start_sign) * 1000
 
             # Verifier verifies the signature
             start_verify = perf_counter()
             is_valid = verifier.verify(message, signature, signer_public_key)
             end_verify = perf_counter()
 
-            time_verify.append((end_verify - start_verify) * 1000)
+            verify_time = (end_verify - start_verify) * 1000
 
             if not is_valid:
                 print(f"WARNING: Verification failed at iteration {i}!")
 
-    return pd.DataFrame({
-        'variant': [variant] * runs,
-        'keypair': time_keypair,
-        'sign': time_sign,
-        'verify': time_verify
-    })
+        results.append({
+            "variant": variant,
+            "keypair": keypair_time,
+            "sign": sign_time,
+            "verify": verify_time
+        })
+
+    return results
