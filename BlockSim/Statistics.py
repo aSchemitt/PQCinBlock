@@ -63,18 +63,20 @@ class Statistics:
 
     ########################################################### prepare the global chain  ###########################################################################################
     def global_chain():
-        for i in c.global_chain:
-            if p.model == 0:
-                block = [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size]
-                Statistics.chain += [block]
-            elif p.model == 1:
-                block = [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size, i.transactions_verification_time]
-                Statistics.chain += [block]
-                Statistics.blocks_verification_times.append(i.transactions_verification_time)
-            elif p.model == 2:
-                block = [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.usedgas, len(i.uncles), i.transactions_verification_time]
-                Statistics.chain += [block]
-                Statistics.blocks_verification_times.append(i.transactions_verification_time)
+        if p.model==0:
+                for i in c.global_chain:
+                        block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size]
+                        Statistics.chain +=[block]
+        if p.model==1:
+                for i in c.global_chain:
+                        block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size, i.transactions_verification_time]
+                        Statistics.chain +=[block]
+                        Statistics.blocks_verification_times.append(i.transactions_verification_time)
+        elif p.model==2:
+                for i in c.global_chain:
+                        block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.usedgas, len(i.uncles), i.transactions_verification_time]
+                        Statistics.chain +=[block]
+                        Statistics.blocks_verification_times.append(i.transactions_verification_time)
 
     ########################################################### Print simulation results to Excel ###########################################################################################
     def print_to_excel(fname):
@@ -137,8 +139,8 @@ class Statistics:
                 
                 if Statistics.blocks_verification_times:
                     # Genesis Block - descarta o primeiro valor, pois está vindo 0
-                    blocks_verification = Statistics.blocks_verification_times[1:]
-                    # print(blocks_verification, len(blocks_verification))
+                    blocks_verification = Statistics.blocks_verification_times
+                    print(blocks_verification, len(blocks_verification))
                     mean_blocks = np.mean(blocks_verification)
                     # std_verify = np.std(Statistics.blocks_verification_times)
                 else:

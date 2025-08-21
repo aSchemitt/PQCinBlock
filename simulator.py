@@ -2,17 +2,21 @@ import os
 import pandas as pd
 import numpy as np
 from pathlib import Path
+import sys
+import logging
+import shutil
 
 # Internal imports
 import save
-import utils
-import logging
-import sys 
-from BlockSim.Main import blocksim
+import utils 
+from simulator_config import simulator_config
 
 MODELS={}
 MODELS[1]="Bitcoin"
 MODELS[2]="Ethereum"
+
+CONFIG_PATH="./BlockSim/InputsConfig.py"
+
 
 def simulator(results_dir, model, input_file, runs, variants_by_module):
 
@@ -24,8 +28,19 @@ def simulator(results_dir, model, input_file, runs, variants_by_module):
 
     logging.info("")
     logging.info(f"BlockSim run model {model} ({MODELS[model]})")
+        
+    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+        f.write(simulator_config(model, runs))
     
-    blocksim(input_file=input_file, output_file=str(output_blocksim), runs=runs, model=model)
+    copyfile = simulator_directory / f"InputsConfig{model}.py"
+
+    shutil.copy2(CONFIG_PATH, copyfile)
+
+    logging.info("")
+    logging.info(f"\tBlockSim configuration file ready in: {CONFIG_PATH}")
+    logging.info("")
+
+    utils.run_cmd(f"python -m BlockSim.Main {input_file} {output_blocksim}")
     
     try:
         df = pd.read_csv(output_blocksim)
@@ -34,7 +49,6 @@ def simulator(results_dir, model, input_file, runs, variants_by_module):
         logging.error(f"Error: {e}")
         sys.exit(-1)
         
-
     df_simulator_mean_std = utils.compute_mean_std(
         df=df, 
         group_by='variant',

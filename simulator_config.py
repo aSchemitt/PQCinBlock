@@ -1,4 +1,6 @@
-class InputsConfig:
+def simulator_config(model, runs):
+
+    return f"""class InputsConfig:
 
     ''' Seclect the model to be simulated.
     0 : The base model
@@ -6,7 +8,7 @@ class InputsConfig:
     2 : Ethereum model
     3 : AppendableBlock model
     '''
-    model = 2
+    model = {model}
 
     ''' Input configurations for the base model '''
     if model == 0:
@@ -35,7 +37,7 @@ class InputsConfig:
 
         ''' Simulation Parameters '''
         simTime = 1000  # the simulation length (in seconds)
-        Runs = 2  # Number of simulation runs
+        Runs = {runs}  # Number of simulation runs
 
     ''' Input configurations for Bitcoin model '''
     if model == 1:
@@ -64,7 +66,7 @@ class InputsConfig:
 
         ''' Simulation Parameters '''
         simTime = 10000  # the simulation length (in seconds)
-        Runs = 2  # Number of simulation runs
+        Runs = {runs}  # Number of simulation runs
 
     ''' Input configurations for Ethereum model '''
     if model == 2:
@@ -104,7 +106,7 @@ class InputsConfig:
 
         ''' Simulation Parameters '''
         simTime = 500  # the simulation length (in seconds)
-        Runs = 2  # Number of simulation runs
+        Runs = {runs}  # Number of simulation runs
 
         ''' Input configurations for AppendableBlock model '''
     if model == 3:
@@ -160,11 +162,11 @@ class InputsConfig:
         simTime = 500
 
         # Number of simulation runs
-        Runs = 2
+        Runs = {runs}
 
         ''' Verification '''
         # Varify the model implementation at the end of first run
         VerifyImplemetation = True
 
         maxTxListSize = 0
-    
+    """

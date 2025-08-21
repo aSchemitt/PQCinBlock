@@ -4,7 +4,7 @@ python main.py --sign \
     ecdsa \
     mldsa \
     --levels 3 5 \
-    --runs 2 \
-    --warm-up 3 \
-    --runs-simulator 4 \
-    --model 1 2 
+    --runs 3 \
+    --warm-up 2 \
+    --runs-simulator 2 \
+    --model 1 2

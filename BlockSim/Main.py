@@ -1,4 +1,4 @@
-from BlockSim.InputsConfig import InputsConfig as p, set_model
+from BlockSim.InputsConfig import InputsConfig as p
 from BlockSim.Event import Event, Queue
 from BlockSim.Scheduler import Scheduler
 from BlockSim.Statistics import Statistics
@@ -28,7 +28,7 @@ elif p.model == 2:
 elif p.model == 1:
     from BlockSim.Models.Bitcoin.BlockCommit import BlockCommit
     from BlockSim.Models.Bitcoin.Consensus import Consensus
-    from BlockSim.Models.Bitcoin.Transaction import LightTransaction as LT, FullTransaction as FT
+    from BlockSim.Models.Transaction import LightTransaction as LT, FullTransaction as FT
     from BlockSim.Models.Bitcoin.Node import Node
     from BlockSim.Models.Incentives import Incentives
 
@@ -42,9 +42,12 @@ elif p.model == 0:
 ########################################################## Start Simulation ##############################################################
 
 
-def blocksim(input_file, output_file, runs, model):
+def main():
+    
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+
     try:         
-        set_model(model)
         df = pd.read_csv(input_file, index_col=False)
         for index, line in df.iterrows():
             p.variant = line["variant"]
@@ -58,8 +61,9 @@ def blocksim(input_file, output_file, runs, model):
             except Exception as e:
                 logging.exception(e)
             try:
-                # for i in range(p.Runs):
-                for i in range(runs):
+                Statistics.index = 0
+                for i in range(p.Runs):
+                # for i in range(runs):
                     # start_simulation = time()
                     clock = 0  # set clock to 0 at the start of the simulation
                     if p.hasTrans:
@@ -119,5 +123,5 @@ def blocksim(input_file, output_file, runs, model):
 
 
 ######################################################## Run Main method #####################################################################
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()
