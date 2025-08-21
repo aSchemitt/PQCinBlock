@@ -1,0 +1,89 @@
+{
+  "config": {
+    "input_file": null,
+    "levels": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "list_sign": false,
+    "model": [
+      1,
+      2
+    ],
+    "runs": 10000,
+    "runs_simulator": 1000,
+    "sign": [
+      "ecdsa",
+      "mldsa",
+      "dilithium",
+      "falcon",
+      "falcon-padded",
+      "mayo",
+      "sphincs-sha-s",
+      "sphincs-sha-f",
+      "sphincs-shake-s",
+      "sphincs-shake-f",
+      "cross-rsdp-small",
+      "cross-rsdpg-small",
+      "cross-rsdp-balanced",
+      "cross-rsdpg-balanced",
+      "cross-rsdp-fast",
+      "cross-rsdpg-fast"
+    ],
+    "verbosity": 20,
+    "warm_up": 1000
+  },
+  "system_metadata": {
+    "timestamp": "2025-08-20T01:04:19.271496",
+    "platform": {
+      "system": "Linux",
+      "release": "6.8.0-65-generic",
+      "version": "#68~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 15 18:06:34 UTC 2",
+      "machine": "x86_64"
+    },
+    "python": {
+      "version": "3.10.12",
+      "compiler": "GCC 11.4.0",
+      "implementation": "CPython"
+    },
+    "cpu": {
+      "brand": "13th Gen Intel(R) Core(TM) i7-1360P",
+      "cores_physical": 12,
+      "cores_logical": 16,
+      "hz_advertised": "1.1147 GHz",
+      "hz_actual": "1.1147 GHz",
+      "architecture": "x86_64"
+    },
+    "memory": {
+      "total_gb": 30.93
+    },
+    "timer": {
+      "perf_counter_resolution_ns": 38.99913281202316,
+      "perf_counter_units": "seconds (float)",
+      "time_ns_available": true
+    },
+    "environment": {
+      "cpu_governor": "powersave",
+      "cpu_affinity": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    }
+  }
+}
