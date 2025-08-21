@@ -2,7 +2,7 @@ from BlockSim.Scheduler import Scheduler
 from BlockSim.InputsConfig import InputsConfig as p
 from BlockSim.Models.Bitcoin.Node import Node
 from BlockSim.Statistics import Statistics
-from BlockSim.Models.Bitcoin.Transaction import LightTransaction as LT, FullTransaction as FT
+from BlockSim.Models.Transaction import LightTransaction as LT, FullTransaction as FT
 from BlockSim.Models.Network import Network
 from BlockSim.Models.Bitcoin.Consensus import Consensus as c
 from BlockSim.Models.BlockCommit import BlockCommit as BaseBlockCommit
@@ -31,7 +31,6 @@ class BlockCommit(BaseBlockCommit):
 
                 event.block.transactions = blockTrans
                 event.block.usedgas= blockSize
-                event.block.calculate_transactions_verification_time()
 
             miner.blockchain.append(event.block)
 

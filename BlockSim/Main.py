@@ -1,11 +1,10 @@
-from BlockSim.InputsConfig import InputsConfig as p, set_model
+from BlockSim.InputsConfig import InputsConfig as p
 from BlockSim.Event import Event, Queue
 from BlockSim.Scheduler import Scheduler
 from BlockSim.Statistics import Statistics
 import csv
 import os
 import sys
-import logging
 import pandas as pd
 from time import time
 
@@ -28,7 +27,7 @@ elif p.model == 2:
 elif p.model == 1:
     from BlockSim.Models.Bitcoin.BlockCommit import BlockCommit
     from BlockSim.Models.Bitcoin.Consensus import Consensus
-    from BlockSim.Models.Bitcoin.Transaction import LightTransaction as LT, FullTransaction as FT
+    from BlockSim.Models.Transaction import LightTransaction as LT, FullTransaction as FT
     from BlockSim.Models.Bitcoin.Node import Node
     from BlockSim.Models.Incentives import Incentives
 
@@ -42,21 +41,19 @@ elif p.model == 0:
 ########################################################## Start Simulation ##############################################################
 
 
-def blocksim(input_file, output_file, runs, model):
+def blocksim(input_file, output_file, runs):
     try:         
-        set_model(model)
         df = pd.read_csv(input_file, index_col=False)
         for index, line in df.iterrows():
             p.variant = line["variant"]
-            logging.info(f"\tRunning {p.variant}...")
+            print(f"Running {p.variant}...")
             try:                
                 mean_verify = float(line["mean_verify"])
                 std_verify = float(line["std_verify"])
                 p.mean_verify = mean_verify
                 p.std_verify = std_verify
-
             except Exception as e:
-                logging.exception(e)
+                print(e)
             try:
                 # for i in range(p.Runs):
                 for i in range(runs):
