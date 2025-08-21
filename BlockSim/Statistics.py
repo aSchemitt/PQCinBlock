@@ -140,7 +140,7 @@ class Statistics:
                 if Statistics.blocks_verification_times:
                     # Genesis Block - descarta o primeiro valor, pois está vindo 0
                     blocks_verification = Statistics.blocks_verification_times
-                    print(blocks_verification, len(blocks_verification))
+                    # print(blocks_verification, len(blocks_verification))
                     mean_blocks = np.mean(blocks_verification)
                     # std_verify = np.std(Statistics.blocks_verification_times)
                 else:
