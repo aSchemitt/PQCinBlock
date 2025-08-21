@@ -77,8 +77,8 @@ def _run_selected_variants(file_runs, file_mean_std, variants_by_module, functio
                 mean_label_width = 12
                 std_label_width = 11
                 logging.info(f"\t\t\t{'mean keypair':<{mean_label_width}} = {row['mean_keypair']:.6f} ms\t{'std keypair':<{std_label_width}} = {row['std_keypair']:.6f} ms")
-                logging.info(f"\t\t\t{'mean sign':<{mean_label_width}} = {row['mean_sign']:.6f} ms\t{'std keypair':<{std_label_width}} = {row['std_sign']:.6f} ms")
-                logging.info(f"\t\t\t{'mean verify':<{mean_label_width}} = {row['mean_verify']:.6f} ms\t{'std keypair':<{std_label_width}} = {row['std_verify']:.6f} ms")
+                logging.info(f"\t\t\t{'mean sign':<{mean_label_width}} = {row['mean_sign']:.6f} ms\t{'std sign':<{std_label_width}} = {row['std_sign']:.6f} ms")
+                logging.info(f"\t\t\t{'mean verify':<{mean_label_width}} = {row['mean_verify']:.6f} ms\t{'std verify':<{std_label_width}} = {row['std_verify']:.6f} ms")
             
             except Exception as e:
                 logging.error(f"\t\tError: {module}/{variant}: {e}")
