@@ -37,6 +37,7 @@ class Transaction(object):
         self.value=value
         self.size = size
         self.fee= fee
+        self.verification_time = 0.0
 
 
 class LightTransaction():
@@ -59,6 +60,7 @@ class LightTransaction():
             tx.to= random.choice (p.NODES).id
             tx.size= random.expovariate(1/p.Tsize)
             tx.fee= random.expovariate(1/p.Tfee)
+            tx.verification_time = calculate_verification_time()
 
             pool += [tx]
 
@@ -134,3 +136,6 @@ class FullTransaction():
                 count+=1
 
         return transactions, size
+
+def calculate_verification_time():
+    return random.gauss(mu=p.mean_verify,sigma=p.std_verify)

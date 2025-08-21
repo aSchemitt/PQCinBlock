@@ -5,6 +5,7 @@ from BlockSim.Statistics import Statistics
 import csv
 import os
 import sys
+import logging
 import pandas as pd
 from time import time
 
@@ -41,22 +42,28 @@ elif p.model == 0:
 ########################################################## Start Simulation ##############################################################
 
 
-def blocksim(input_file, output_file, runs):
+def main():
+    
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+
     try:         
         df = pd.read_csv(input_file, index_col=False)
         for index, line in df.iterrows():
             p.variant = line["variant"]
-            print(f"Running {p.variant}...")
+            logging.info(f"\tRunning {p.variant}...")
             try:                
                 mean_verify = float(line["mean_verify"])
                 std_verify = float(line["std_verify"])
                 p.mean_verify = mean_verify
                 p.std_verify = std_verify
+
             except Exception as e:
-                print(e)
+                logging.exception(e)
             try:
-                # for i in range(p.Runs):
-                for i in range(runs):
+                Statistics.index = 0
+                for i in range(p.Runs):
+                # for i in range(runs):
                     # start_simulation = time()
                     clock = 0  # set clock to 0 at the start of the simulation
                     if p.hasTrans:
@@ -116,5 +123,5 @@ def blocksim(input_file, output_file, runs):
 
 
 ######################################################## Run Main method #####################################################################
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()

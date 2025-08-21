@@ -27,3 +27,10 @@ class Block(object):
         self.miner = miner
         self.transactions = transactions or []
         self.size = size
+        self.transactions_verification_time = 0.0
+
+    def calculate_transactions_verification_time(self):
+        acc =0
+        for t in self.transactions:
+            acc += t.verification_time
+        self.transactions_verification_time = acc

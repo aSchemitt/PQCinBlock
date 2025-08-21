@@ -1,6 +1,9 @@
 import argparse
 import os
 import importlib
+import logging
+import shlex
+import subprocess
 import inspect
 from typing import Callable, Any
 import pandas as pd
@@ -112,3 +115,26 @@ def filter_algorithms(algorithms: dict, selected_algorithms: list = None, select
                 filtered.setdefault(module, {})[algorithm] = selected_variants
 
     return filtered
+
+def run_cmd(cmd, shell=False):
+    """
+    Executes a shell/system command with logging, respecting dry-run mode.
+
+    Parameters
+    ----------
+    cmd : str
+        The shell command to execute.
+    shell : bool
+        Whether to execute the command within a shell environment.
+
+    Notes
+    -----
+    - Logs both the raw command and the parsed array (if applicable).
+    - Supports dry-run mode via args.dryrun.
+    """
+    logging.info("Command line: {}".format(cmd))
+    cmd_array = shlex.split(cmd)
+    logging.debug("Command array: {}".format(cmd_array))
+    logging.info("")
+    # if not arguments.dryrun:
+    subprocess.run(cmd_array, check=True, shell=shell)

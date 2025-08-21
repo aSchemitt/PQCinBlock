@@ -31,6 +31,7 @@ class BlockCommit(BaseBlockCommit):
 
                 event.block.transactions = blockTrans
                 event.block.usedgas= blockSize
+                event.block.calculate_transactions_verification_time()
 
             miner.blockchain.append(event.block)
 
