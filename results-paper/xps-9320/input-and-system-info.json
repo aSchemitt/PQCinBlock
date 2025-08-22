@@ -36,7 +36,7 @@
     "warm_up": 1000
   },
   "system_metadata": {
-    "timestamp": "2025-08-20T01:04:19.271496",
+    "timestamp": "2025-08-22T01:08:43.107529",
     "platform": {
       "system": "Linux",
       "release": "6.8.0-65-generic",
@@ -52,15 +52,15 @@
       "brand": "13th Gen Intel(R) Core(TM) i7-1360P",
       "cores_physical": 12,
       "cores_logical": 16,
-      "hz_advertised": "1.1147 GHz",
-      "hz_actual": "1.1147 GHz",
+      "hz_advertised": "4.3000 GHz",
+      "hz_actual": "4.3000 GHz",
       "architecture": "x86_64"
     },
     "memory": {
       "total_gb": 30.93
     },
     "timer": {
-      "perf_counter_resolution_ns": 38.99913281202316,
+      "perf_counter_resolution_ns": 37.98049874603748,
       "perf_counter_units": "seconds (float)",
       "time_ns_available": true
     },

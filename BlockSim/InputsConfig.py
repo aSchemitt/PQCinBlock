@@ -35,7 +35,7 @@ class InputsConfig:
 
         ''' Simulation Parameters '''
         simTime = 1000  # the simulation length (in seconds)
-        Runs = 2  # Number of simulation runs
+        Runs = 1000  # Number of simulation runs
 
     ''' Input configurations for Bitcoin model '''
     if model == 1:
@@ -64,7 +64,7 @@ class InputsConfig:
 
         ''' Simulation Parameters '''
         simTime = 10000  # the simulation length (in seconds)
-        Runs = 2  # Number of simulation runs
+        Runs = 1000  # Number of simulation runs
 
     ''' Input configurations for Ethereum model '''
     if model == 2:
@@ -104,7 +104,7 @@ class InputsConfig:
 
         ''' Simulation Parameters '''
         simTime = 500  # the simulation length (in seconds)
-        Runs = 2  # Number of simulation runs
+        Runs = 1000  # Number of simulation runs
 
         ''' Input configurations for AppendableBlock model '''
     if model == 3:
@@ -160,7 +160,7 @@ class InputsConfig:
         simTime = 500
 
         # Number of simulation runs
-        Runs = 2
+        Runs = 1000
 
         ''' Verification '''
         # Varify the model implementation at the end of first run
