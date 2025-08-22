@@ -1,0 +1,89 @@
+{
+  "config": {
+    "input_file": null,
+    "levels": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "list_sign": false,
+    "model": [
+      1,
+      2
+    ],
+    "runs": 10000,
+    "runs_simulator": 1000,
+    "sign": [
+      "ecdsa",
+      "mldsa",
+      "dilithium",
+      "falcon",
+      "falcon-padded",
+      "mayo",
+      "sphincs-sha-s",
+      "sphincs-sha-f",
+      "sphincs-shake-s",
+      "sphincs-shake-f",
+      "cross-rsdp-small",
+      "cross-rsdpg-small",
+      "cross-rsdp-balanced",
+      "cross-rsdpg-balanced",
+      "cross-rsdp-fast",
+      "cross-rsdpg-fast"
+    ],
+    "verbosity": 20,
+    "warm_up": 1000
+  },
+  "system_metadata": {
+    "timestamp": "2025-08-22T00:35:40.006573",
+    "platform": {
+      "system": "Linux",
+      "release": "6.8.0-64-generic",
+      "version": "#67-Ubuntu SMP PREEMPT_DYNAMIC Sun Jun 15 20:23:31 UTC 2025",
+      "machine": "x86_64"
+    },
+    "python": {
+      "version": "3.10.18",
+      "compiler": "GCC 13.3.0",
+      "implementation": "CPython"
+    },
+    "cpu": {
+      "brand": "AMD Ryzen 7 5800X 8-Core Processor",
+      "cores_physical": 8,
+      "cores_logical": 16,
+      "hz_advertised": "3.8683 GHz",
+      "hz_actual": "3.8683 GHz",
+      "architecture": "x86_64"
+    },
+    "memory": {
+      "total_gb": 78.45
+    },
+    "timer": {
+      "perf_counter_resolution_ns": 49.97127689421177,
+      "perf_counter_units": "seconds (float)",
+      "time_ns_available": true
+    },
+    "environment": {
+      "cpu_governor": "schedutil",
+      "cpu_affinity": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    }
+  }
+}
