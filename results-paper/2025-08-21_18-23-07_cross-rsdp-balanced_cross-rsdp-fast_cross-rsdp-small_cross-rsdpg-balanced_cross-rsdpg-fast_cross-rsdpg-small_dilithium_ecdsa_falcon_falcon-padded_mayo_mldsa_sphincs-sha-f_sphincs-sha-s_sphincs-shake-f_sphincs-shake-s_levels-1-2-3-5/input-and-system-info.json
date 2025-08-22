@@ -1,0 +1,72 @@
+{
+  "config": {
+    "input_file": null,
+    "levels": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "list_sign": false,
+    "model": [
+      1,
+      2
+    ],
+    "runs": 10000,
+    "runs_simulator": 1000,
+    "sign": [
+      "ecdsa",
+      "mldsa",
+      "dilithium",
+      "falcon",
+      "falcon-padded",
+      "mayo",
+      "sphincs-sha-s",
+      "sphincs-sha-f",
+      "sphincs-shake-s",
+      "sphincs-shake-f",
+      "cross-rsdp-small",
+      "cross-rsdpg-small",
+      "cross-rsdp-balanced",
+      "cross-rsdpg-balanced",
+      "cross-rsdp-fast",
+      "cross-rsdpg-fast"
+    ],
+    "verbosity": 20,
+    "warm_up": 1000
+  },
+  "system_metadata": {
+    "timestamp": "2025-08-22T08:24:20.327492",
+    "platform": {
+      "system": "Darwin",
+      "release": "24.0.0",
+      "version": "Darwin Kernel Version 24.0.0: Tue Sep 24 23:36:26 PDT 2024; root:xnu-11215.1.12~1/RELEASE_ARM64_T8103",
+      "machine": "arm64"
+    },
+    "python": {
+      "version": "3.11.13",
+      "compiler": "Clang 17.0.0 (clang-1700.0.13.3)",
+      "implementation": "CPython"
+    },
+    "cpu": {
+      "brand": "Apple M1",
+      "cores_physical": 8,
+      "cores_logical": 8,
+      "hz_advertised": "unknown",
+      "hz_actual": "unknown",
+      "architecture": "arm64"
+    },
+    "memory": {
+      "total_gb": 8.0
+    },
+    "timer": {
+      "perf_counter_resolution_ns": 40.978193283081055,
+      "perf_counter_units": "seconds (float)",
+      "time_ns_available": true
+    },
+    "environment": {
+      "cpu_governor": "N/A",
+      "cpu_affinity": "N/A"
+    }
+  }
+}
