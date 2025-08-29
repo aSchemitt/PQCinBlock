@@ -17,7 +17,7 @@ def print_by_variants(filtered_algorithms: dict):
             for level, variant in sorted(variants.items()):
                 logging.info(f"\t\t{' ' * 4}{variant} - NIST Level {level}")
             logging.info(f"\t{mechanism} - end")
-            logging.info()
+            logging.info(msg='')
 
 
 def _run_selected_variants(file_runs, file_mean_std, variants_by_module, function, runs=5, warm_up=1):
