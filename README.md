@@ -1,8 +1,8 @@
-# BlockSignPQC
+# PQCinBlock
 
-[Demo Video](https://youtu.be/CNKmvOyZqm0)
+<!-- [Demo Video](https://youtu.be/CNKmvOyZqm0) -->
 
-**BlockSignPQC** is a modular and extensible benchmark for evaluating post-quantum digital signature (PQC) algorithms in blockchain environments.
+**PQCinBlock** is a modular and extensible benchmark tool for evaluating post-quantum digital signature (PQC) algorithms in blockchain environments.
 It enables direct cryptographic performance measurements and realistic blockchain network simulations through integration with the BlockSim simulator.
 
 ## Table of Contents
@@ -14,13 +14,13 @@ It enables direct cryptographic performance measurements and realistic blockchai
 - [Argument List](#argument-list)
 - [Execution](#execution)
 - [Adding New Algorithms](#adding-new-algorithms)
-- [Evaluating the Impact of Algorithms on Blockchain Simulation](#evaluating-the-impact-of-algorithms-on-blockchain-simulation)
+- [Reproducing the Experiments Described in the Paper](#reproducing-the-experiments-described-in-the-paper)
 - [License](#license)
 
 
 ## Objectives
 
-- Compare classical algorithms (e.g., ECDSA) and post-quantum algorithms (e.g., Dilithium, Falcon, SPHINCS+).
+- Compare classical algorithms (e.g., ECDSA) and post-quantum algorithms (e.g., ML-DSA, Dilithium, Falcon, SPHINCS+).
 - Allow continuous and modular integration of new algorithms.
 - Simulate the systemic impact of algorithms in blockchain networks.
 
@@ -28,35 +28,38 @@ It enables direct cryptographic performance measurements and realistic blockchai
 
 The tool consists of three main modules, each responsible for a specific part of the evaluation process.
 
-1. **`sign_python`**: Executes algorithms and measures signing, verification, and key generation times.
-2. **`blocksim`**: Simulates blockchain networks using the collected timing data.
-3. **`visualization`**: Generates charts from the data of the previous two modules.
+1. **`benchmark`**: Executes algorithms and measures signing, verification, and key generation times.
+2. **`simulator`**: Simulates blockchain networks using the collected timing data.
+3. **`graph`**: Generates charts from the data of the previous two modules.
 
 ### Directory Structure
 ```bash
-BlockSignPQC/
+PQCinBlock/
 ├── algorithms/           # PQC algorithm implementations (with ALGORITHMS and time_evaluation)
 ├── BlockSim/             # Blockchain simulator source code (BlockSim)
 ├── results-paper/        # Complete results used in the paper
 ├── results/              # Execution results in CSV and charts (not versioned)
 ├── visualization/        # Chart generation from execution results
 ├── venv/                 # Python virtual environment (not versioned)
+├── benchmark.py        # Signature algorithms benchmarking module
 ├── graph.py              # Auxiliary chart generation script
+├── info.py               # Auxiliary metadata collector
 ├── install.sh            # Main installation script
 ├── LICENSE               # License file
 ├── main.py               # Main script orchestrating all steps
 ├── README.md             # This documentation file
 ├── requirements.txt      # Required Python dependencies
-├── run_experiment.sh     # Runs all experiments described in the paper
+├── run_benchmark_and_simulator.sh     # Runs all experiments described in the paper
+├── run_benchmark_only.sh # Run all algorithms, but no simulations
+├── run_simulator_only.sh # Run only the simulator using data from an input file
 ├── save.py               # Result saving functions
-├── sign_python.py        # Signature algorithms benchmarking module
 ├── simulator.py          # BlockSim interface and execution with collected data
 ├── utils.py              # Auxiliary utility functions
 ```
 
 ## Requirements
 
-- [Python 3.11.2](https://www.python.org/downloads/release/python-3112/)
+- [Python 3.11.2+](https://www.python.org/downloads/release/python-3112/)
 - [liboqs](https://github.com/open-quantum-safe/liboqs)
 - [liboqs-python](https://github.com/open-quantum-safe/liboqs-python)
 
@@ -64,8 +67,8 @@ BlockSignPQC/
 
 Clone this repository:
 ```bash
-git clone https://github.com/SBSeg25/BlockSignPQC.git
-cd BlockSignPQC
+git clone https://github.com/conseg/PQCinBlock.git
+cd PQCinBlock
 ```
 
 Make the installation script executable:
@@ -82,7 +85,7 @@ Install the requirements:
 
 #### Virtual Environment
 
-Activate the virtual environment before running BlockSignPQC.
+Activate the virtual environment before running PQCinBlock.
 
 Activate:
 ```bash
@@ -98,13 +101,14 @@ deactivate
 
 | Arguments          | Description                                          |
 | ------------------ | ---------------------------------------------------- |
-| `--sign`           | List of digital signature algorithms to evaluate. Supports multiple values, including classical algorithms (e.g., ECDSA) and post-quantum ones (e.g., Dilithium, Falcon, SPHINCS+). |
-| `--runs`           | Number of executions for each algorithm to collect metrics. |
-| `--warm-up`        | Number of warm-up runs before the main measurement to stabilize performance.   |
-| `--levels`         | Defines the NIST security levels (1 to 5) of the algorithms to be tested. Supports multiple values. |
-| `--runs-simulator` | Number of simulation runs in *BlockSim*. |
-| `--list-sign`      | Displays all available signature algorithms in the tool. |
 | `--help`           | Shows the help message with the description of all available arguments and usage instructions. |
+| `--list-sign`      | Displays all available signature algorithms in the tool. |
+| `--sign`           | List of digital signature algorithms to evaluate. Supports multiple values, including classical algorithms (e.g., ECDSA) and post-quantum ones (e.g., Dilithium, Falcon, SPHINCS+). |
+| `--runs`           | Number of executions of each algorithm. |
+| `--warm-up`        | Number of warm-up runs before the main measurement, for performance stabilization.   |
+| `--levels`         | Defines the NIST security levels (1 to 5) of the algorithms to be tested. Can receive multiple values. |
+| `--model` | Defines the *BlockSim* model to use (1: Bitcoin, 2: Ethereum). Can receive multiple values. |
+| `--runs-simulator` | Number of simulation runs in *BlockSim*. |
 
 
 ## Execution
@@ -115,24 +119,40 @@ python main.py --help
 ```
 
 ```text
-usage: main.py [-h]
-               [--sign {sphincs-sha-f,mldsa,cross-rsdpg-balanced,cross-rsdp-fast,ecdsa,cross-rsdpg-fast,sphincs-sha-s,falcon,falcon-padded,cross-rsdp-balanced,mayo,sphincs-shake-f,cross-rsdp-small,cross-rsdpg-small,dilithium,sphincs-shake-s} [{sphincs-sha-f,mldsa,cross-rsdpg-balanced,cross-rsdp-fast,ecdsa,cross-rsdpg-fast,sphincs-sha-s,falcon,falcon-padded,cross-rsdp-balanced,mayo,sphincs-shake-f,cross-rsdp-small,cross-rsdpg-small,dilithium,sphincs-shake-s} ...]]
-               [--levels {1,2,3,4,5} [{1,2,3,4,5} ...]] [--runs RUNS] [--warm-up WARM_UP] [--list-sign] [--runs-simulator RUNS_SIMULATOR]
+usage: main.py [-h] [--model {1,2} [{1,2} ...]]
+               [--sign {cross-rsdpg-small,sphincs-shake-s,cross-rsdp-small,cross-rsdpg-fast,cross-rsdpg-balanced,ecdsa,cross-rsdp-fast,falcon,falcon-padded,mldsa,sphincs-shake-f,dilithium,mayo,cross-rsdp-balanced,sphincs-sha-f,sphincs-sha-s} [{cross-rsdpg-small,sphincs-shake-s,cross-rsdp-small,cross-rsdpg-fast,cross-rsdpg-balanced,ecdsa,cross-rsdp-fast,falcon,falcon-padded,mldsa,sphincs-shake-f,dilithium,mayo,cross-rsdp-balanced,sphincs-sha-f,sphincs-sha-s} ...]]
+               [--levels {1,2,3,4,5} [{1,2,3,4,5} ...]] [--runs RUNS]
+               [--warm-up WARM_UP] [--list-sign]
+               [--runs-simulator RUNS_SIMULATOR] [--input-file INPUT_FILE]
+               [--verbosity VERBOSITY]
 
-BlockSignPQC
+PQCinBlock
 
 options:
   -h, --help            show this help message and exit
-  --sign {sphincs-sha-f,mldsa,cross-rsdpg-balanced,cross-rsdp-fast,ecdsa,cross-rsdpg-fast,sphincs-sha-s,falcon,falcon-padded,cross-rsdp-balanced,mayo,sphincs-shake-f,cross-rsdp-small,cross-rsdpg-small,dilithium,sphincs-shake-s} [{sphincs-sha-f,mldsa,cross-rsdpg-balanced,cross-rsdp-fast,ecdsa,cross-rsdpg-fast,sphincs-sha-s,falcon,falcon-padded,cross-rsdp-balanced,mayo,sphincs-shake-f,cross-rsdp-small,cross-rsdpg-small,dilithium,sphincs-shake-s} ...]
-                        Input list of digital signature algorithms (default: None)
+  --model {1,2} [{1,2} ...], -m {1,2} [{1,2} ...]
+                        BlockSim model to use (1: Bitcoin, 2: Ethereum)
+                        (default: [2])
+  --sign {cross-rsdpg-small,sphincs-shake-s,cross-rsdp-small,cross-rsdpg-fast,cross-rsdpg-balanced,ecdsa,cross-rsdp-fast,falcon,falcon-padded,mldsa,sphincs-shake-f,dilithium,mayo,cross-rsdp-balanced,sphincs-sha-f,sphincs-sha-s} [{cross-rsdpg-small,sphincs-shake-s,cross-rsdp-small,cross-rsdpg-fast,cross-rsdpg-balanced,ecdsa,cross-rsdp-fast,falcon,falcon-padded,mldsa,sphincs-shake-f,dilithium,mayo,cross-rsdp-balanced,sphincs-sha-f,sphincs-sha-s} ...], -s {cross-rsdpg-small,sphincs-shake-s,cross-rsdp-small,cross-rsdpg-fast,cross-rsdpg-balanced,ecdsa,cross-rsdp-fast,falcon,falcon-padded,mldsa,sphincs-shake-f,dilithium,mayo,cross-rsdp-balanced,sphincs-sha-f,sphincs-sha-s} [{cross-rsdpg-small,sphincs-shake-s,cross-rsdp-small,cross-rsdpg-fast,cross-rsdpg-balanced,ecdsa,cross-rsdp-fast,falcon,falcon-padded,mldsa,sphincs-shake-f,dilithium,mayo,cross-rsdp-balanced,sphincs-sha-f,sphincs-sha-s} ...]
+                        Input list of digital signature algorithms (space-
+                        separated) (default: None)
   --levels {1,2,3,4,5} [{1,2,3,4,5} ...], -l {1,2,3,4,5} [{1,2,3,4,5} ...]
-                        NIST levels (default: range(1, 6))
+                        Nist levels (space-separated) (default: [1, 2, 3, 4,
+                        5])
   --runs RUNS, -r RUNS  Number of executions (default: 1)
   --warm-up WARM_UP, -wp WARM_UP
-                        Number of warm-up executions (default: 0)
-  --list-sign           List of variants digital signature algorithms (default: False)
+                        Number of executions warm up (default: 0)
+  --list-sign           List of variants digital signature algorithms
+                        (default: False)
   --runs-simulator RUNS_SIMULATOR
                         Number of simulator runs (default: 0)
+  --input-file INPUT_FILE, -i INPUT_FILE
+                        Input CSV file for the simulator to run independently
+                        of benchmark. (default: None)
+  --verbosity VERBOSITY, -v VERBOSITY
+                        verbosity logging level (INFO=20 DEBUG=10) (default:
+                        20)
+
 ```
 
 ### Listing Algorithms and Variants
@@ -212,25 +232,30 @@ This section describes the step-by-step process for reproducing the experiments 
 
 ### Execution Environment
 
-The experiments were performed in two hardware configurations:
+The experiments were performed in three hardware configurations:
 
-- **Machine M1**
+- **Laptop ARM**
+  - Apple M1
+  - macOS Darwin Kernel 24.0.0
+  - 8 GB RAM
+
+- **Laptop x64**
+  - Intel Core i7-1360P
+  - Ubuntu 22.04.1 LTS Linux Kernel 6.8.0-65-generic
+  - 32 GB RAM
+
+- **Desktop**
   - AMD Ryzen 7 5800X
-  - Ubuntu 22.04.5 LTS
-  - 64 GB RAM
-
-- **Machine M2**
-  - Intel(R) Core(TM) i7-9700
-  - Debian GNU/Linux 12
-  - 16 GB RAM
+  - Ubuntu 24.04.2 LTS Linux Kernel 6.8.0-64-generic
+  - 80 GB RAM
 
 
 ### Installation and Setup
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/SBSeg25/BlockSignPQC.git
-cd BlockSignPQC
+git clone https://github.com/conseg/PQCinBlock.git
+cd PQCinBlock
 ```
 
 2. Grant execution permission to the script:
@@ -253,16 +278,20 @@ source venv/bin/activate
 **Goal:** Simulate the impact of algorithms on block verification times in a blockchain network, using BlockSim, for NIST security levels 1, 3, and 5.
 
 **Command:**
+
+Use the `run_benchmark_and_simulator.sh` scrip or the following command:
 ```bash
 python main.py --sign \
     ecdsa \
     mldsa \
+    dilithium \
+    falcon \
+    falcon-padded \
+    mayo \
     sphincs-sha-s \
     sphincs-sha-f \
     sphincs-shake-s \
     sphincs-shake-f \
-    falcon \
-    mayo \
     cross-rsdp-small \
     cross-rsdpg-small \
     cross-rsdp-balanced \
@@ -271,14 +300,15 @@ python main.py --sign \
     cross-rsdpg-fast \
     --runs 10000 \
     --warm-up 1000 \
-    --levels 1 3 5 \
+    --levels 1 2 3 5 \
+    --model 1 2 \
     --runs-simulator 1000
 ```
 
 **Setup:**
 
-- Flags used: `--sign`, `--runs`, `--warm-up`, `--levels`, `--runs-simulator`.
-- Estimated runtime: 10–12 hours depending on the machine used (M1 or M2).
+- Flags used: `--sign`, `--runs`, `--warm-up`, `--levels`, `--model`, `--runs-simulator`.
+- Estimated runtime: 10–16 hours depending on the machine used.
 - Results: CSV files and charts in `./results/`.
 
 ## License
