@@ -165,7 +165,7 @@ def _run_simulator(args, filtered_algorithms, results_dir, path_csv):
 def main():
     """Main function to parse arguments and dispatch tasks."""
     parser = argparse.ArgumentParser(
-        description="BlockSignPQC",
+        description="PQCinBlock",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
 
