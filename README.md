@@ -103,7 +103,7 @@ deactivate
 | ------------------ | ---------------------------------------------------- |
 | `--help`           | Shows the help message with the description of all available arguments and usage instructions. |
 | `--list-sign`      | Displays all available signature algorithms in the tool. |
-| `--sign`           | List of digital signature algorithms to evaluate. Supports multiple values, including classical algorithms (e.g., ECDSA) and post-quantum ones (e.g., Dilithium, Falcon, SPHINCS+). |
+| `--sign`           | List of digital signature algorithms to evaluate. Supports multiple values, including classical algorithms (e.g., ECDSA) and post-quantum ones (e.g., ML-DSA, Dilithium, Falcon, SPHINCS+). |
 | `--runs`           | Number of executions of each algorithm. |
 | `--warm-up`        | Number of warm-up runs before the main measurement, for performance stabilization.   |
 | `--levels`         | Defines the NIST security levels (1 to 5) of the algorithms to be tested. Can receive multiple values. |
